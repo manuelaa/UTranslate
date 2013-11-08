@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/homepage_land"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android1:layout_width="wrap_content"
+        android1:layout_height="49dp"
+        android1:layout_gravity="right" >
+
+        <ImageButton
+            android1:id="@+id/ibNewMes"
+            android1:layout_width="wrap_content"
+            android1:layout_height="wrap_content"
+            android1:layout_gravity="center_vertical"
+            android1:background="@null"
+            android1:src="@drawable/new_m" />
+
+        <ImageButton
+            android1:id="@+id/imageButton2"
+            android1:layout_width="wrap_content"
+            android1:layout_height="wrap_content"
+            android1:layout_gravity="center_vertical"
+            android1:background="@null"
+            android1:src="@drawable/new_m_1" />
+
+    </LinearLayout>
+
+    <TabHost
+        android1:id="@+id/tabhost"
+        android1:layout_width="match_parent"
+        android1:layout_height="162dp" >
+
+        <TabWidget
+            android1:id="@android:id/tabs"
+            android1:layout_width="match_parent"
+            android1:layout_height="64dp" >
+        </TabWidget>
+
+        <FrameLayout
+            android1:id="@android:id/tabcontent"
+            android1:layout_width="match_parent"
+            android1:layout_height="519dp" >
+
+            <LinearLayout
+                android1:id="@+id/tab1"
+                android1:layout_width="match_parent"
+                android1:layout_height="522dp"
+                android1:layout_gravity="bottom" >
+            </LinearLayout>
+
+            <LinearLayout
+                android1:id="@+id/tab2"
+                android1:layout_width="match_parent"
+                android1:layout_height="match_parent" >
+            </LinearLayout>
+
+            <LinearLayout
+                android1:id="@+id/tab3"
+                android1:layout_width="match_parent"
+                android1:layout_height="match_parent" >
+            </LinearLayout>
+        </FrameLayout>
+    </TabHost>
+
+</LinearLayout>

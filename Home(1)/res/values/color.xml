@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tab_text">#ffeec3</color>
+    <color name="button_c">#a79779</color>
+    <color name="button_post">#9d8e70</color>
+    <color name="button_post_text">#4e4a41</color>
+    <color name="tab_back">#767062</color>
+    <color name="transparent">#00000000</color>
+    <color name="button_login_text">#8a8270</color>
+    <color name="background">#ffeec3</color>
+    
+</resources>
+
