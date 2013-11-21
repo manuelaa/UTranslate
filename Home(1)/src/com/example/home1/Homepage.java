@@ -1,5 +1,7 @@
 package com.example.home1;
 
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -44,6 +46,27 @@ public class Homepage extends Activity implements OnClickListener {
 		specs.setIndicator("Translated");
 		th.addTab(specs);
 		
+		//TODO TESTIRANJE POZIVA WEB SERVISA		
+		AsyncTask<Void, Void, String> webTask = new AsyncTask<Void, Void, String>() {			
+			@Override
+			protected String doInBackground(Void... params) {
+				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+				builder.appendPath("login");
+				return Connection.callWebService(builder.build().toString());						
+			}			
+			@Override
+			protected void onPostExecute(String result) {
+				if (result != null)
+					System.out.println("TESTIRANJE - REZULTAT: " + result);
+				else {
+					System.out.println("TESTIRANJE - LOGIN FAIL");
+					//TODO ODKOMENTIRAJ OVO DA BI SE KORISNIKA IZBACILO VAN JER NIJE LOGIRAN
+					//OVO JE TU ZAKOMENTIRANO DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
+					//Connection.logout(Homepage.this);
+				}
+			}
+		};		
+		webTask.execute((Void)null);		
 	}
 
 	@Override
@@ -59,7 +82,7 @@ public class Homepage extends Activity implements OnClickListener {
 		switch (v.getId()){
 		case (R.id.ibNewMes):
 			Intent i = new Intent(this,RTranslation.class);
-			startActivity(i);
+			startActivity(i);			
 		}
 	}
 }
