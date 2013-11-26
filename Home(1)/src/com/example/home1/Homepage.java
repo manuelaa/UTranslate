@@ -62,7 +62,7 @@ public class Homepage extends Activity implements OnClickListener {
 					System.out.println("TESTIRANJE - LOGIN FAIL");
 					//TODO ODKOMENTIRAJ OVO DA BI SE KORISNIKA IZBACILO VAN JER NIJE LOGIRAN
 					//OVO JE TU ZAKOMENTIRANO DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
-					//Connection.logout(Homepage.this);
+					//Connection.errorLogout(Homepage.this);
 				}
 			}
 		};		

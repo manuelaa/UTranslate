@@ -1,8 +1,12 @@
 package com.example.home1;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -11,6 +15,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,9 +35,11 @@ public class Connection {
 	private static final String GOOGLE_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 	private static final int REQUEST_CODE_GOOGLE_AUTH_ERROR = 1001;
 	private static final int REQUEST_CODE_PLAY_SERVICE_ERROR = 1002;
+	private static final String CONNECTION_FILE = "ConnPrefs.dat";
 	
 	private static Activity loginActivity;
 	private static Button loginButton;
+	private static ProgressDialog loginProgress;
 	
 	//pamti nas token
 	private static String token;
@@ -56,8 +64,34 @@ public class Connection {
 		
 		if (res != ConnectionResult.SUCCESS)
 			GooglePlayServicesUtil.getErrorDialog(res, loginActivity, REQUEST_CODE_PLAY_SERVICE_ERROR);
-	}
 		
+		//provjeri da li sam vec logiran od prije
+		//sejvaj postavke da se moze obnoviti connection kad se app ponovno pokrene
+		try {
+			FileInputStream fis = loginActivity.openFileInput(CONNECTION_FILE);
+			ObjectInputStream in = new ObjectInputStream(fis);
+			
+			boolean connected = in.readBoolean();			
+			if (connected) {
+				googleMail = in.readUTF();
+				googleToken = in.readUTF();
+				token = in.readUTF();
+			}
+			
+			in.close();
+			fis.close();
+			
+			if (connected) redirectToHomepage();
+		} catch (IOException ex) {}
+	}
+	
+	private static void redirectToHomepage()
+	{
+		Intent i = new Intent(loginActivity, Homepage.class);
+		loginActivity.startActivity(i);
+		loginActivity.finish();
+	}
+	
 	//funkcija za login
 	//prima odabrani email za account
 	//poziva ju Login Activity
@@ -69,6 +103,16 @@ public class Connection {
 		
 		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 			@Override
+			protected void onPreExecute() {
+				loginProgress = new ProgressDialog(loginActivity);
+				loginProgress.setTitle("Login");
+				loginProgress.setMessage("Please wait...");
+				loginProgress.setCancelable(false);
+				loginProgress.setIndeterminate(true);
+				loginProgress.show();
+			}
+			
+			@Override
 			protected Void doInBackground(Void... params) {
 				googleToken = getGoogleToken();
 				token = getToken();
@@ -78,16 +122,31 @@ public class Connection {
 			@Override
 			protected void onPostExecute(Void result) {					
 				loginButton.setEnabled(true);
+				loginProgress.dismiss();
 				
 				//TODO MAKNI DA BI LOGIN FUNKCIONIRAO
 				//OVO JE TU DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
 				token = "nekaj";
 				
 				if (token != null) {
-					//login je uspio - prebaci na homepage
+					//login je uspio
 					System.out.println("TESTIRANJE - LOGIN USPJESAN, TOKEN: " + token);
-					Intent i = new Intent(loginActivity, Homepage.class);
-					loginActivity.startActivity(i);					
+					
+					//sejvaj postavke da se moze obnoviti connection kad se app ponovno pokrene
+					try {
+						FileOutputStream fos = loginActivity.openFileOutput(CONNECTION_FILE, Context.MODE_PRIVATE);
+						ObjectOutputStream out = new ObjectOutputStream(fos);
+						out.writeBoolean(true);
+						out.writeUTF(googleMail);
+						out.writeUTF(googleToken);
+						out.writeUTF(token);						
+						out.flush();
+						out.close();
+						fos.close();			
+					} catch (IOException ex) {}
+														
+					//prebaci na homepage
+					redirectToHomepage();
 				} else {
 					//login nije uspio - pokazi error (ako nije vec handlan)
 					if (showLoginError) {
@@ -241,8 +300,22 @@ public class Connection {
 
 	//ako se negdje kasnije dogodila greska - callWebService je vratio null nakon oba 2 pokusaja
 	//sa ovom funkcijom se pokazuje korisniku da je doslo do greske i baca ga se nazad na login
-	public static void logout(final Activity activity) 
+	public static void errorLogout(final Activity activity) 
 	{
+		//spremi da vise nije connectan
+		try {
+			FileOutputStream fos = activity.openFileOutput(CONNECTION_FILE, Context.MODE_PRIVATE);
+			ObjectOutputStream out = new ObjectOutputStream(fos);
+			out.writeBoolean(false);
+			out.writeUTF("");
+			out.writeUTF("");
+			out.writeUTF("");						
+			out.flush();
+			out.close();
+			fos.close();			
+		} catch (IOException ex) {}
+		
+		//pokazi alert
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setMessage("Error: Cannot connect to server!")
 		       .setCancelable(false)
