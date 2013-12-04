@@ -8,6 +8,8 @@
     <color name="transparent">#00000000</color>
     <color name="button_login_text">#8a8270</color>
     <color name="background">#ffeec3</color>
+	<color name="post_1">#f0ddac</color>
+    <color name="post_2">#dbc596</color>
     
 </resources>
 

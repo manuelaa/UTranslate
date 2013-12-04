@@ -1,0 +1,122 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/request_translation_land1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:shrinkColumns="*"  
+        android:stretchColumns="*"
+        android:layout_marginTop="19dp" >
+		
+         <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+             >
+
+             <ImageView
+                 android:id="@+id/imageView1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ask" />
+
+		    <ImageButton
+		        android:id="@+id/ibUpitnik2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical"
+		        android:background="@null"
+		        android:src="@drawable/upitnik1" />
+
+		    <ImageView
+		        android:id="@+id/imageView2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/trokut" 
+		        android:layout_gravity="center"/>
+
+		    <ImageButton
+		        android:id="@+id/ibUpitnik"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:background="@null"
+		        android:src="@drawable/upitnik1" />
+
+        </TableRow>
+        
+        <!-- Row 1 with 1 column -->
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+             >
+
+            <EditText
+                
+            	android:layout_marginTop="15dp"
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:ems="10"
+				android:layout_span="2"
+				android:background="@color/post_1"
+				android:textAlignment="textStart"
+				android:gravity="top|left"
+				android:hint="Type your text here...">		
+            </EditText>
+
+        </TableRow>
+		
+        <!-- Row 2 with 3 columns -->
+        <!--   android:layout_marginTop="170dp" -->	
+        
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/post_2">
+
+            <ImageButton
+            	android:id="@+id/imageButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/cam_1" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:src="@drawable/microphone_1"
+                android:background="@null" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:textSize="10dp"
+                android:text="Post"
+                android:textColor="@color/button_post_text"
+                android:background="@color/button_post"
+                 />
+
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>
