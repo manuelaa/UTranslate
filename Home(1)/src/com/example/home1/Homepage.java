@@ -51,8 +51,8 @@ public class Homepage extends Activity implements OnClickListener {
 			@Override
 			protected String doInBackground(Void... params) {
 				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
-				builder.appendPath("login");
-				return Connection.callWebService(builder.build().toString());						
+				builder.appendPath("login");				
+				return Connection.callWebService(builder.build().toString());				
 			}			
 			@Override
 			protected void onPostExecute(String result) {

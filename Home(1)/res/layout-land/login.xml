@@ -10,6 +10,7 @@
     tools:context=".MainActivity" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -17,27 +18,26 @@
         android:layout_marginBottom="40dp"
         android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ems="10"
-            android:hint="gmail"
-            android:inputType="textEmailAddress"
-            android:textColor="#a79779" />
-
         <Button
             android:id="@+id/bLogin"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="131dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Login"
             android:textColor="@color/button_post_text"
             android:textColorHint="@color/button_login_text" />
+
     </LinearLayout>
-    
+
+    <Spinner
+        android:id="@+id/accountSpinner"
+        android:layout_width="191dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="9.57"
+        android:gravity="center_vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical" />
+
 </RelativeLayout>
-
-

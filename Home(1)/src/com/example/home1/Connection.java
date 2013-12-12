@@ -7,9 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URL;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +57,16 @@ public class Connection {
 	//posto dvije greske oko Google logina vec imaju vlastiti handling onda koristim ovu varijablu
 	//da ne pokazujem gresku 2 puta
 	private static boolean showLoginError = true;
+	
+	//pamti response code zadnje pozvane funkcije web servisa
+	//ako je bio IOException biti ce 0
+	//na taj nacin se zna da je greska bila u konekciji a da je token vjerojatno bio ispravan
+	private static int lastResponseCode = 0;
+	
+	//pamti da li se obavila inicijalizacija
+	//sluzi zato da ako veza pukne prilikom vracanja na Login activity ne ucita iz filea
+	//da je ostao logiran i pokusa se logirati opet i na taj nacin pokrene beskonacnu petlju
+	private static boolean initialized = false;
 		
 	//provjerava da li korisnik ima potreban library i sprema login activity za kasnije koristenje
 	public static void initialize(Activity activity)
@@ -65,24 +79,28 @@ public class Connection {
 		if (res != ConnectionResult.SUCCESS)
 			GooglePlayServicesUtil.getErrorDialog(res, loginActivity, REQUEST_CODE_PLAY_SERVICE_ERROR);
 		
-		//provjeri da li sam vec logiran od prije
+		//ako je ovo zaista prva inicijalizacija, provjeri da li sam vec logiran od prije
 		//sejvaj postavke da se moze obnoviti connection kad se app ponovno pokrene
-		try {
-			FileInputStream fis = loginActivity.openFileInput(CONNECTION_FILE);
-			ObjectInputStream in = new ObjectInputStream(fis);
+		if (!initialized) {
+			initialized = true;
 			
-			boolean connected = in.readBoolean();			
-			if (connected) {
-				googleMail = in.readUTF();
-				googleToken = in.readUTF();
-				token = in.readUTF();
-			}
-			
-			in.close();
-			fis.close();
-			
-			if (connected) redirectToHomepage();
-		} catch (IOException ex) {}
+			try {
+				FileInputStream fis = loginActivity.openFileInput(CONNECTION_FILE);
+				ObjectInputStream in = new ObjectInputStream(fis);
+				
+				boolean connected = in.readBoolean();			
+				if (connected) {
+					googleMail = in.readUTF();
+					googleToken = in.readUTF();
+					token = in.readUTF();
+				}
+				
+				in.close();
+				fis.close();
+				
+				if (connected) redirectToHomepage();
+			} catch (IOException ex) {}
+		}
 	}
 	
 	private static void redirectToHomepage()
@@ -235,13 +253,21 @@ public class Connection {
 	//ako dodje do bilo kakve greske vraca null
 	private static String getResponse(String urlPath)
 	{	
+		HttpURLConnection con = null;
+		URL url = null;
+		
 		try {
-			URL url = new URL(urlPath);					
-	        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			url = new URL(urlPath);
+		} catch(MalformedURLException ex) {
+			lastResponseCode = 0;
+			return null;
+		}
+				
+		try {
+	        con = (HttpURLConnection)url.openConnection();
+			lastResponseCode = con.getResponseCode();
 	        
-	        int code = con.getResponseCode();
-	        
-	        if (code == 200) {
+	        if (lastResponseCode == 200) {
 	            InputStream is = con.getInputStream();            
 	            String response = readOutput(is);
 	            is.close();	                       
@@ -249,6 +275,15 @@ public class Connection {
 	        } else
 	        	return null;
 		} catch(IOException ex) {
+			if (!ex.getMessage().contains("connect failed")) {
+				try {
+					lastResponseCode = con.getResponseCode();
+				} catch(IOException ex2) {
+					lastResponseCode = 0;
+				}
+			} else
+				lastResponseCode = 0;		
+			
 			return null;		
 		}
 	}
@@ -258,23 +293,43 @@ public class Connection {
 	//ako dodje do bilo kakve greske vraca null
 	private static String getResponseWithToken(String urlPath)
 	{	
-		if (token == null) return null;
+		if (token == null) {
+			lastResponseCode = 0;
+			return null;
+		}
+		
+		HttpURLConnection con = null;
+		URL url = null;
 		
 		try {
-			URL url = new URL(urlPath);					
-	        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-	        con.addRequestProperty("Authorization", token);
+			url = new URL(urlPath);
+		} catch(MalformedURLException ex) {
+			lastResponseCode = 0;
+			return null;
+		}
+						
+		try {
+			con = (HttpURLConnection)url.openConnection();
+	        con.addRequestProperty("Authorization", token);	        	      
+	        lastResponseCode = con.getResponseCode();
 	        
-	        int code = con.getResponseCode();
-	        
-	        if (code == 200) {
+	        if (lastResponseCode == 200) {
 	            InputStream is = con.getInputStream();            
 	            String response = readOutput(is);
 	            is.close();	                       
 	            return response;
 	        } else
 	        	return null;
-		} catch(IOException ex) {
+		} catch(IOException ex) {	
+			if (!ex.getMessage().contains("connect failed")) {
+				try {
+					lastResponseCode = con.getResponseCode();
+				} catch(IOException ex2) {
+					lastResponseCode = 0;
+				}
+			} else
+				lastResponseCode = 0;
+						
 			return null;		
 		}
 	}
@@ -289,7 +344,7 @@ public class Connection {
 		
 		if (response == null) {
 			if (googleToken != null) GoogleAuthUtil.invalidateToken(loginActivity, googleToken);
-			googleToken = getGoogleToken();
+			googleToken = getGoogleToken();			
 			token = getToken();
 			response = getResponseWithToken(urlPath);			
 		}
@@ -302,18 +357,22 @@ public class Connection {
 	//sa ovom funkcijom se pokazuje korisniku da je doslo do greske i baca ga se nazad na login
 	public static void errorLogout(final Activity activity) 
 	{
-		//spremi da vise nije connectan
-		try {
-			FileOutputStream fos = activity.openFileOutput(CONNECTION_FILE, Context.MODE_PRIVATE);
-			ObjectOutputStream out = new ObjectOutputStream(fos);
-			out.writeBoolean(false);
-			out.writeUTF("");
-			out.writeUTF("");
-			out.writeUTF("");						
-			out.flush();
-			out.close();
-			fos.close();			
-		} catch (IOException ex) {}
+		//ako je do greske doslo zbog tokena a ne zbog IOExceptiona, spremi da vise nije connectan		
+		//System.out.println("TESTIRANJE - errorLogout: lastResponseCode: " + lastResponseCode);
+		
+		if (lastResponseCode != 0) {
+			try {
+				FileOutputStream fos = activity.openFileOutput(CONNECTION_FILE, Context.MODE_PRIVATE);
+				ObjectOutputStream out = new ObjectOutputStream(fos);
+				out.writeBoolean(false);
+				out.writeUTF("");
+				out.writeUTF("");
+				out.writeUTF("");						
+				out.flush();
+				out.close();
+				fos.close();			
+			} catch (IOException ex) {}
+		}
 		
 		//pokazi alert
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
