@@ -1,5 +1,7 @@
 package com.example.home1;
 
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,8 +27,6 @@ public class Homepage extends Activity implements OnClickListener {
 		ImageButton iButton= (ImageButton)findViewById(R.id.ibNewMes);
 		iButton.setOnClickListener(this);
 		
-		
-		
 		TabHost th=(TabHost)findViewById(R.id.tabhost);
 		th.setup();
 		
@@ -48,7 +48,6 @@ public class Homepage extends Activity implements OnClickListener {
 		specs.setIndicator("Translated");
 		th.addTab(specs);
 		
-<<<<<<< HEAD
 		//TODO TESTIRANJE POZIVA WEB SERVISA		
 		AsyncTask<Void, Void, String> webTask = new AsyncTask<Void, Void, String>() {			
 			@Override
@@ -70,8 +69,6 @@ public class Homepage extends Activity implements OnClickListener {
 			}
 		};		
 		webTask.execute((Void)null);		
-=======
->>>>>>> ce60879fa1e253a78b5ed1320062e13ec833ed56
 	}
 
 	@Override

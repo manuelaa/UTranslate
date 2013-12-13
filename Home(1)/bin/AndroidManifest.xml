@@ -7,11 +7,11 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.NETWORK"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    	<uses-permission android:name="android.permission.NETWORK"/>
+    	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    	<uses-permission android:name="android.permission.INTERNET"/>
+    	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -41,9 +41,12 @@
         </activity>
  		 <activity
             android:name="com.example.home1.LanguagesArrayAdapter">
+        </activity>
+        <activity
+            android:name="com.example.home1.Settings">
         </activity>  
         
- 		 <meta-data android:name="com.google.android.gms.version"
+        <meta-data android:name="com.google.android.gms.version"
            android:value="@integer/google_play_services_version" />
     </application>
    

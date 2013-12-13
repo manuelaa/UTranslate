@@ -7,13 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.SocketException;
 import java.net.URL;
 
-import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
