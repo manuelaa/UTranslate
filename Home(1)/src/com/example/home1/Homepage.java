@@ -1,7 +1,5 @@
 package com.example.home1;
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -22,8 +20,12 @@ public class Homepage extends Activity implements OnClickListener {
 		
 		setContentView(R.layout.tabs);
 				
+		ImageButton iButton2= (ImageButton) findViewById(R.id.ibSett);
+		iButton2.setOnClickListener(this);
 		ImageButton iButton= (ImageButton)findViewById(R.id.ibNewMes);
 		iButton.setOnClickListener(this);
+		
+		
 		
 		TabHost th=(TabHost)findViewById(R.id.tabhost);
 		th.setup();
@@ -46,6 +48,7 @@ public class Homepage extends Activity implements OnClickListener {
 		specs.setIndicator("Translated");
 		th.addTab(specs);
 		
+<<<<<<< HEAD
 		//TODO TESTIRANJE POZIVA WEB SERVISA		
 		AsyncTask<Void, Void, String> webTask = new AsyncTask<Void, Void, String>() {			
 			@Override
@@ -67,6 +70,8 @@ public class Homepage extends Activity implements OnClickListener {
 			}
 		};		
 		webTask.execute((Void)null);		
+=======
+>>>>>>> ce60879fa1e253a78b5ed1320062e13ec833ed56
 	}
 
 	@Override
@@ -80,9 +85,15 @@ public class Homepage extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()){
+		case (R.id.ibSett):
+			Intent p = new Intent(this, Settings.class);
+			startActivity(p);
+			break;
 		case (R.id.ibNewMes):
 			Intent i = new Intent(this,RTranslation.class);
-			startActivity(i);			
+			startActivity(i);
+			break;
+		
 		}
 	}
 }
