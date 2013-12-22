@@ -142,6 +142,7 @@ public class Connection {
 				//TODO MAKNI DA BI LOGIN FUNKCIONIRAO
 				//OVO JE TU DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
 				token = "nekaj";
+				googleToken = "nekaj";
 				
 				if (token != null) {
 					//login je uspio

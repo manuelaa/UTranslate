@@ -22,8 +22,6 @@ public class Homepage extends Activity implements OnClickListener {
 		
 		setContentView(R.layout.tabs);
 				
-		ImageButton iButton2= (ImageButton) findViewById(R.id.ibSett);
-		iButton2.setOnClickListener(this);
 		ImageButton iButton= (ImageButton)findViewById(R.id.ibNewMes);
 		iButton.setOnClickListener(this);
 		
@@ -82,10 +80,6 @@ public class Homepage extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()){
-		case (R.id.ibSett):
-			Intent p = new Intent(this, Settings.class);
-			startActivity(p);
-			break;
 		case (R.id.ibNewMes):
 			Intent i = new Intent(this,RTranslation.class);
 			startActivity(i);
