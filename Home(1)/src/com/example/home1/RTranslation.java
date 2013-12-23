@@ -9,8 +9,11 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,7 +36,17 @@ public class RTranslation extends Activity implements OnClickListener {
 	private String photoPath = null;
 	//temporary path do nove slike koja se slika
 	private String photoPathNew = null;
-		
+	
+	//podaci za dodavanje zvuka na request
+	private final CharSequence[] audioDialogOptions = {"Record new audio", "Existing audio", "Remove audio"};
+	private AlertDialog audioDialog;
+	private AlertDialog audioRecordDialog;
+	private ImageButton addAudioButton;
+	private MediaRecorder audioRecorder = null;
+	//path do zvuka koja se uploada
+	private String audioPath = null;
+	private static final int ACTIVITY_CHOOSE_AUDIO = 300;	
+	
 	//stvara file za sliku
 	private File createImageFile() throws IOException {
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
@@ -85,6 +98,55 @@ public class RTranslation extends Activity implements OnClickListener {
 		startActivityForResult(intent, ACTIVITY_CHOOSE_IMAGE);
 	}
 	
+	//poziva explorer za odabir zvuka sa diska
+	private void selectAudioFromDisk() {
+		Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);		
+		chooseFile.setType("audio/*");		
+		Intent intent = Intent.createChooser(chooseFile, "Choose audio");		
+		startActivityForResult(intent, ACTIVITY_CHOOSE_AUDIO);
+	}
+	
+	//zapocinje snimanje zvuka
+	private void startAudioRecording() {
+        audioRecorder = new MediaRecorder();
+        audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        
+	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+	    String audioFileName = "UTranslate_" + timeStamp;
+        audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + audioFileName + ".3gp";        
+        audioRecorder.setOutputFile(audioPath);
+        
+        System.out.println(audioPath);
+        
+        try {        	
+            audioRecorder.prepare();
+            audioRecorder.start();
+            audioRecordDialog.show();
+        } catch (IOException e) {
+        }
+    }
+
+    private void stopAudioRecording() {
+        audioRecorder.stop();
+        audioRecorder.release();
+        audioRecorder = null;
+        
+        ContentValues values = new ContentValues(3);
+        long current = System.currentTimeMillis();
+        File file = new File(audioPath);
+        values.put(MediaStore.Audio.Media.TITLE, "audio" + file.getName());
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/3gpp");
+        values.put(MediaStore.Audio.Media.DATA, file.getAbsolutePath());
+        ContentResolver contentResolver = getContentResolver();         
+        Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri newUri = contentResolver.insert(base, values);         
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
+        
+        addAudioButton.setImageResource(R.drawable.sound_1);
+    }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,8 +177,19 @@ public class RTranslation extends Activity implements OnClickListener {
 	    	} else if (resultCode == RESULT_CANCELED) {
 	    		
 	    	}	    	
+	    } else if (requestCode == ACTIVITY_CHOOSE_AUDIO) {
+	    	//zavrsio je odabir zvuka sa diska
+	    	
+	    	if (resultCode == RESULT_OK) {
+	    		//dohvati lokaciju zvuka
+	    		
+	    		Uri uri = data.getData();	    		
+	    		audioPath = uri.getPath();	    		
+	    		addAudioButton.setImageResource(R.drawable.sound_1);	
+	    	} else if (resultCode == RESULT_CANCELED) {
+	    		
+	    	}	    	
 	    }
-		
 	}
 	
 	@Override
@@ -127,8 +200,7 @@ public class RTranslation extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		ImageButton imagebutton= (ImageButton) findViewById(R.id.ibUpitnik);
 		imagebutton.setOnClickListener(this);
-		
-		
+				
 		//slozi dijalog za odabir izmedju kamere/slike sa diska
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle("Add photo");
@@ -150,6 +222,38 @@ public class RTranslation extends Activity implements OnClickListener {
 	    });
 	    pictureDialog = builder.create();
 		
+		//slozi dijalog za odabir izmedju snimanja/zvuka sa diska
+	    builder = new AlertDialog.Builder(this);
+	    builder.setTitle("Add audio");
+	    builder.setItems(audioDialogOptions, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == 0) {
+					//zeli snimiti novi zvuk
+					startAudioRecording();
+				} else if (which == 1) {
+					//zeli postojeci zvuk sa diska
+					selectAudioFromDisk();
+				} else {
+					//zeli maknuti zvuk
+					audioPath = null;
+					addAudioButton.setImageResource(R.drawable.sound_2);
+				}
+			}	    	
+	    });
+	    audioDialog = builder.create();
+	    
+	    //slozi dijalog za konkretno snimanje zvuka
+	    builder = new AlertDialog.Builder(this);
+	    builder.setMessage("Recording audio...")
+	       .setCancelable(false)	       
+	       .setPositiveButton("Stop", new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	                stopAudioRecording();
+	           }
+	       });	       
+	    audioRecordDialog = builder.create();
+	    
 		//gumb za dodavanje slike		
 		addPictureButton = (ImageButton) findViewById(R.id.imageButton1);
 		addPictureButton.setImageResource(R.drawable.cam_2);
@@ -160,6 +264,15 @@ public class RTranslation extends Activity implements OnClickListener {
 			}					
 		});
 		 
+		//gumb za dodavanje zvuka
+		addAudioButton = (ImageButton) findViewById(R.id.imageButton2);
+		addAudioButton.setImageResource(R.drawable.sound_2);
+		addAudioButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				audioDialog.show();				
+			}					
+		});
 	}
 
 	@Override
