@@ -252,18 +252,22 @@ containing a value of this type.
         public static final int upitnik1=0x7f02003e;
     }
     public static final class id {
-        public static final int accountSpinner=0x7f050014;
-        public static final int action_settings=0x7f050021;
-        public static final int bLogin=0x7f050015;
-        public static final int bPost=0x7f050020;
+        public static final int CheckBox=0x7f050013;
+        public static final int LangListView=0x7f050019;
+        public static final int accountSpinner=0x7f05001b;
+        public static final int action_settings=0x7f050028;
+        public static final int bLogin=0x7f05001c;
+        public static final int bOK=0x7f050017;
+        public static final int bPost=0x7f050027;
         public static final int button1=0x7f05000e;
-        public static final int checkBox1=0x7f050013;
+        public static final int checkBox1=0x7f050016;
         public static final int editText1=0x7f05000a;
         public static final int hybrid=0x7f050004;
-        public static final int ibCam=0x7f05001e;
-        public static final int ibMic=0x7f05001f;
-        public static final int ibNewMes=0x7f050017;
-        public static final int ibSound=0x7f05001d;
+        public static final int ibCam=0x7f050025;
+        public static final int ibMic=0x7f050026;
+        public static final int ibNewMes=0x7f05001e;
+        public static final int ibSound=0x7f050024;
+        public static final int ibTest=0x7f050018;
         public static final int ibUpitnik=0x7f050008;
         public static final int ibUpitnik2=0x7f050007;
         public static final int imBack=0x7f050010;
@@ -271,21 +275,24 @@ containing a value of this type.
         public static final int imageButton2=0x7f05000d;
         public static final int imageView1=0x7f050006;
         public static final int imageView2=0x7f05000f;
-        public static final int label=0x7f050012;
-        public static final int linearLayout1=0x7f050016;
-        public static final int logo=0x7f050011;
+        public static final int item_icon=0x7f050011;
+        public static final int item_txtLang=0x7f050012;
+        public static final int label=0x7f050015;
+        public static final int linearLayout1=0x7f05001d;
+        public static final int logo=0x7f050014;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int satellite=0x7f050002;
-        public static final int tab1=0x7f050019;
-        public static final int tab2=0x7f05001a;
-        public static final int tab3=0x7f05001b;
-        public static final int tabhost=0x7f050018;
+        public static final int tab1=0x7f050020;
+        public static final int tab2=0x7f050021;
+        public static final int tab3=0x7f050022;
+        public static final int tabhost=0x7f05001f;
         public static final int tableRow1=0x7f050005;
         public static final int tableRow2=0x7f050009;
         public static final int tableRow3=0x7f05000b;
         public static final int terrain=0x7f050003;
-        public static final int tv_show=0x7f05001c;
+        public static final int textView1=0x7f05001a;
+        public static final int tv_show=0x7f050023;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;
@@ -293,12 +300,14 @@ containing a value of this type.
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int choose_languages=0x7f030001;
-        public static final int languages=0x7f030002;
-        public static final int login=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int tabs=0x7f030005;
-        public static final int translation_1=0x7f030006;
-        public static final int translation_2=0x7f030007;
+        public static final int item_view=0x7f030002;
+        public static final int languages=0x7f030003;
+        public static final int languages_list=0x7f030004;
+        public static final int login=0x7f030005;
+        public static final int main=0x7f030006;
+        public static final int tabs=0x7f030007;
+        public static final int translation_1=0x7f030008;
+        public static final int translation_2=0x7f030009;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
