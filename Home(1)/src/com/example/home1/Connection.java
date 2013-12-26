@@ -38,7 +38,7 @@ public class Connection {
 	private static final int REQUEST_CODE_PLAY_SERVICE_ERROR = 1002;
 	private static final String CONNECTION_FILE = "ConnPrefs.dat";
 	
-	private static Activity loginActivity;
+	private static Activity loginActivity = null;
 	private static Button loginButton;
 	private static ProgressDialog loginProgress;
 	
@@ -332,12 +332,26 @@ public class Connection {
 		}
 	}
 	
+	
+	//ako se aplikacija srusi onda postoji mogucnost da ne ode odmah na Login activity
+	//i na taj nacin se ova klasa ne inicijalizira
+	//ova funkcija to provjerava i po potrebi redirecta natrag na Login kako bi se prosla inicijalizacija
+	//prima trenutno aktivni activity da ga ugasi po potrebi
+	public static void ProvjeriInicijalizaciju(Activity activity) 
+	{
+		if (!initialized) {
+     	   Intent i = new Intent(activity, Login.class);
+     	   activity.startActivity(i);
+     	   activity.finish();			
+		}	
+	}
+	
 	//ovo je glavna funkcija koja se koristi za pozivanje naseg web servisa unutar aplikacije
 	//ako nam je token istekao pokusati ce ga obnoviti i opet pozvati web servis
 	//ako ne uspije obnoviti vraca null
 	//ne pozivati izravno nego uvijek preko background threada
 	public static String callWebService(String urlPath)
-	{
+	{		
 		String response = getResponseWithToken(urlPath);
 		
 		if (response == null) {

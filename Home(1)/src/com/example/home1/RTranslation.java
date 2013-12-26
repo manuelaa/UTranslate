@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,9 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
 
-public class RTranslation extends Activity implements OnClickListener {
-//	ImageButton imagebutton;
-	
+public class RTranslation extends Activity {	
 	//podaci za dodavanje slike na request
 	private final CharSequence[] pictureDialogOptions = {"Take a photo with camera", "Existing photo", "Remove photo"};
 	private AlertDialog pictureDialog;
@@ -45,8 +45,20 @@ public class RTranslation extends Activity implements OnClickListener {
 	private MediaRecorder audioRecorder = null;
 	//path do zvuka koja se uploada
 	private String audioPath = null;
-	private static final int ACTIVITY_CHOOSE_AUDIO = 300;	
+	private static final int ACTIVITY_CHOOSE_AUDIO = 300;
 	
+	//podaci sa kojeg jezika
+	public ArrayList<Lang> languagesFrom;
+	public ArrayList<Lang> checkedLanguagesFrom;
+	private ImageButton fromLanguageButton;
+	private static final int ACTIVITY_FROM_LANGUAGE = 400;
+	
+	//podaci na koji jezik
+	public ArrayList<Lang> languagesTo;
+	public ArrayList<Lang> checkedLanguagesTo;
+	private ImageButton toLanguageButton;
+	private static final int ACTIVITY_TO_LANGUAGE = 500;
+		
 	//stvara file za sliku
 	private File createImageFile() throws IOException {
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
@@ -158,7 +170,7 @@ public class RTranslation extends Activity implements OnClickListener {
 	        	
 				photoPath = photoPathNew;        	
 	        	galleryAddPic();
-	        	addPictureButton.setImageResource(R.drawable.cam_1);
+	        	addPictureButton.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));
 	        } else if (resultCode == RESULT_CANCELED) {
 	        	//izbrisi novi file
 	        	
@@ -173,7 +185,7 @@ public class RTranslation extends Activity implements OnClickListener {
 	    		
 	    		Uri uri = data.getData();	    		
 	    		photoPath = uri.getPath();	    			    		
-	    		addPictureButton.setImageResource(R.drawable.cam_1);	
+	    		addPictureButton.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));	
 	    	} else if (resultCode == RESULT_CANCELED) {
 	    		
 	    	}	    	
@@ -185,9 +197,29 @@ public class RTranslation extends Activity implements OnClickListener {
 	    		
 	    		Uri uri = data.getData();	    		
 	    		audioPath = uri.getPath();	    		
-	    		addAudioButton.setImageResource(R.drawable.sound_1);	
+	    		addAudioButton.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));
 	    	} else if (resultCode == RESULT_CANCELED) {
 	    		
+	    	}	    	
+	    } else if (requestCode == ACTIVITY_FROM_LANGUAGE) {
+	    	//zavrsio je odabir jezika sa kojeg se prevodi
+	    	
+	    	if (resultCode == RESULT_OK) {
+	    		if (checkedLanguagesFrom.size() == 1)
+	    			fromLanguageButton.setImageDrawable(getResources().getDrawable(checkedLanguagesFrom.get(0).resourceId));
+	    		else
+	    			fromLanguageButton.setImageDrawable(getResources().getDrawable(R.drawable.upitnik1));
+	    	}	    	
+	    } else if (requestCode == ACTIVITY_TO_LANGUAGE) {
+	    	//zavrsio je odabir jezika sa kojeg se prevodi
+	    	
+	    	if (resultCode == RESULT_OK) {
+	    		if (checkedLanguagesTo.size() == 1)
+	    			toLanguageButton.setImageDrawable(getResources().getDrawable(checkedLanguagesTo.get(0).resourceId));
+	    		else if (checkedLanguagesTo.size() > 1)
+	    			toLanguageButton.setImageDrawable(getResources().getDrawable(R.drawable.vise_jezika));
+	    		else
+	    			toLanguageButton.setImageDrawable(getResources().getDrawable(R.drawable.upitnik1));
 	    	}	    	
 	    }
 	}
@@ -198,8 +230,6 @@ public class RTranslation extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		ImageButton imagebutton= (ImageButton) findViewById(R.id.ibUpitnik);
-		imagebutton.setOnClickListener(this);
 				
 		//slozi dijalog za odabir izmedju kamere/slike sa diska
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -216,7 +246,7 @@ public class RTranslation extends Activity implements OnClickListener {
 				} else {
 					//zeli maknut sliku
 					photoPath = null;
-					addPictureButton.setImageResource(R.drawable.cam_2);
+					addPictureButton.setImageDrawable(getResources().getDrawable(R.drawable.cam_2));
 				}
 			}	    	
 	    });
@@ -237,7 +267,7 @@ public class RTranslation extends Activity implements OnClickListener {
 				} else {
 					//zeli maknuti zvuk
 					audioPath = null;
-					addAudioButton.setImageResource(R.drawable.sound_2);
+					addAudioButton.setImageDrawable(getResources().getDrawable(R.drawable.sound_2));
 				}
 			}	    	
 	    });
@@ -256,7 +286,7 @@ public class RTranslation extends Activity implements OnClickListener {
 	    
 		//gumb za dodavanje slike		
 		addPictureButton = (ImageButton) findViewById(R.id.imageButton1);
-		addPictureButton.setImageResource(R.drawable.cam_2);
+		addPictureButton.setImageDrawable(getResources().getDrawable(R.drawable.cam_2));
 		addPictureButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -266,20 +296,64 @@ public class RTranslation extends Activity implements OnClickListener {
 		 
 		//gumb za dodavanje zvuka
 		addAudioButton = (ImageButton) findViewById(R.id.imageButton2);
-		addAudioButton.setImageResource(R.drawable.sound_2);
+		addAudioButton.setImageDrawable(getResources().getDrawable(R.drawable.sound_2));
 		addAudioButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				audioDialog.show();				
+				audioDialog.show();
 			}					
 		});
+		
+		populateLangList();
+		
+		//gumb za jezik sa kojeg se prevodi
+		fromLanguageButton = (ImageButton) findViewById(R.id.ibUpitnik2);
+		fromLanguageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//namjesti podatke
+				LanguagesActivity.languages = languagesFrom;
+				LanguagesActivity.checkedLanguages = checkedLanguagesFrom;
+				LanguagesActivity.multiSelectEnabled = false;
+				
+				Intent i = new Intent(RTranslation.this, LanguagesActivity.class);				
+				startActivityForResult(i, ACTIVITY_FROM_LANGUAGE);
+			}
+		});
+		
+		//gumb za jezike na koje se prevodi
+		toLanguageButton = (ImageButton) findViewById(R.id.ibUpitnik);
+		toLanguageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//namjesti podatke
+				LanguagesActivity.languages = languagesTo;
+				LanguagesActivity.checkedLanguages = checkedLanguagesTo;
+				LanguagesActivity.multiSelectEnabled = true;
+				
+				Intent i = new Intent(RTranslation.this, LanguagesActivity.class);				
+				startActivityForResult(i, ACTIVITY_TO_LANGUAGE);
+			}
+		});
+		
 	}
-
-	@Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		Intent i = new Intent(this, LanguagesActivity.class);
-		startActivity(i);
+	
+	//sagradi listu jezika
+	private void populateLangList() {
+		languagesTo = new ArrayList<Lang>();
+		checkedLanguagesTo = new ArrayList<Lang>();
+		languagesFrom = new ArrayList<Lang>();
+		checkedLanguagesFrom = new ArrayList<Lang>();
+				
+		TypedArray resLangs = getResources().obtainTypedArray(R.array.languages);		
+		for(int i = 0; i < resLangs.length(); i++) {
+			int arrayId = resLangs.getResourceId(i, 0);
+			if (arrayId > 0) {
+				String[] lang = getResources().getStringArray(arrayId);
+				languagesTo.add(new Lang(lang[0], lang[1], this));
+				languagesFrom.add(new Lang(lang[0], lang[1], this));				
+			}
+		}
+		resLangs.recycle();
 	}
-
 }

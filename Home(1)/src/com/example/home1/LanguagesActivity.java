@@ -9,10 +9,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,54 +27,47 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class LanguagesActivity extends Activity /*implements OnCheckedChangeListener*/ {
-	private List<Lang> languages = new ArrayList<Lang>();
-	public String choosen;
-
-	public static int mLastCorrectPosition = -1;
+public class LanguagesActivity extends Activity {
+	//sve je static da bi RTranslation mogao pristupiti tome
+	public static ArrayList<Lang> languages;
+	public static ArrayList<Lang> checkedLanguages;
+	public static boolean multiSelectEnabled;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.languages_list);
 		
-		Button backB= (Button) findViewById(R.id.bOK);
+		populateListView();	
+
+		Button backB = (Button)findViewById(R.id.bOK);
 		backB.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		populateListView();
-		populateLangList();		
-		
+				pokusajIzaci();			}
+		});		
 	}
-
-	private void populateLangList() {
-		//sagradi listu jezika	
-		TypedArray resLangs = getResources().obtainTypedArray(R.array.languages);		
-		for(int i = 0; i < resLangs.length(); i++) {
-			int arrayId = resLangs.getResourceId(i, 0);
-			if (arrayId > 0) {
-				String[] lang = getResources().getStringArray(arrayId);
-				languages.add(new Lang(lang[0], lang[1], this));
-			}
-		}
-		resLangs.recycle();
+	
+	public void pokusajIzaci() {
+		//ako nije odabrao niti jedan jezik nema izlaza
+		if (!checkedLanguages.isEmpty()) { 
+			setResult(RESULT_OK);
+			finish();
+		}		
+	}
+	
+	@Override
+	public void onBackPressed() {
+		pokusajIzaci();	
 	}
 
 	private void populateListView() {
-		// TODO Auto-generated method stub
 		ArrayAdapter<Lang> adapter = new LanguageListAdapter();
 		ListView list = (ListView) findViewById(R.id.LangListView);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		list.setAdapter(adapter);
-
-		//list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
-
+	
 	private class LanguageListAdapter extends ArrayAdapter<Lang> {
 		public LanguageListAdapter() {
 			super(LanguagesActivity.this, R.layout.item_view, languages);
@@ -80,73 +78,48 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 			// Make sure we have a view to work with (may have been given null)			
 			View itemView = convertView;
 			if (itemView == null)
-				itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
+				itemView = LanguagesActivity.this.getLayoutInflater().inflate(R.layout.item_view, parent, false);
 
-			// find lang to work with
+			//uzmi lang
 			final Lang currentLang = languages.get(position);
 			
-			// fill the view	
+			//slika	
 			ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
-			imageView.setImageResource(currentLang.resourceId);
+			imageView.setImageDrawable(getResources().getDrawable(currentLang.resourceId));
 
-			final ImageView imageView1 = (ImageView) itemView.findViewById(R.id.ibTest);
-
-			// Lang
-			TextView makeText = (TextView) itemView.findViewById(R.id.item_txtLang);
-			makeText.setText(currentLang.name);
-
-			// checkbox
-			final CheckBox checkB = (CheckBox) itemView.findViewById(R.id.CheckBox);
-			final CheckBox cb = (CheckBox) itemView.findViewById(R.id.CheckBox);
-			//checkB.setSelected(false);
-			
-			
-			checkB.setOnClickListener(new OnClickListener() {
+			//tekst
+			TextView langText = (TextView) itemView.findViewById(R.id.item_txtLang);
+			langText.setText(currentLang.name);
+		
+			//checkbox
+			final CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.CheckBox);
+			checkBox.setChecked(currentLang.checked);
+						
+			checkBox.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {					
-					SparseBooleanArray checked;
-					long[] checked_id;
-					//Lang currentLang = Languages.get(position);
-					Button newB = (Button)findViewById(R.id.bOK);
-			        newB.setText(currentLang.name);
-			        ImageButton newImB=(ImageButton)findViewById(R.id.ibTest);
-			        newImB.setImageResource(currentLang.resourceId);			      
-			        ListView list = (ListView) findViewById(R.id.LangListView);
-					 if (mLastCorrectPosition != -1) {
-	                    	//Lang lastLang = (Languages.get(mLastCorrectPosition));
-	                    	//CheckBox cb=(CheckBox)findViewById(lastLang.getcheckboxID());
-	                    	newB.setText(languages.get(mLastCorrectPosition).name+"last");
-	                    	
-	                    	if (checkB.isChecked()) {
-	                    		 newB.setText(languages.get(mLastCorrectPosition).name+"-1");
-	                    		// ((CheckBox)v).setChecked(true);
-	                    		// ((CheckBox)cb).setChecked(false);
-	                    		 
-	                    		 	int len = list.getCount();
-	  		 			       		checked = list.getCheckedItemPositions();
-	  		 			       		checked_id=list.getCheckedItemIds();
-	  		 			       		for (int i = 0; i < len; i++){
-	  		 			       			if (checked.get(i) && i!=position) {
-	  		 			       				CheckBox cb=(CheckBox)findViewById((int)checked_id[i]);
-	  		 			       				((CheckBox)cb).setChecked(false);
-	  		 			       				//CheckBox cb1=(CheckBox)findViewById(position);
-	  		 			       			   //((CheckBox)cb1).setChecked(true);
-	  		 			        // do whatever you want with the checked item
-	  		 			       			}
-	                        }
-	                    }
+				public void onClick(View v) {
+					if (checkBox.isChecked()) {
+						if (!multiSelectEnabled) {
+							//treba disableati ostale checkboxove jer multiselect nije dozvoljen
+							for(Lang lang : checkedLanguages)
+								lang.checked = false;						
+							
+							checkedLanguages.clear();
+						}
+					
+						//oznaci checkiranim
+						currentLang.checked = true;
+						checkedLanguages.add(currentLang);						
+					} else {
+						currentLang.checked = false;
+						checkedLanguages.remove(currentLang);						
+					}
 
-					 	}
-	                   	else {
-		 			        newB.setText(languages.get(position).name);
-		 			       }
-	                        
-		              checked = list.getCheckedItemPositions();
-		              mLastCorrectPosition = position;
-	             }  
-	           });
-
-
+					//refresh
+					notifyDataSetChanged();
+				}
+			});
+			
 			return itemView;
 		}
 	}
