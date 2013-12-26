@@ -8,6 +8,22 @@
 package com.example.home1;
 
 public final class R {
+    public static final class array {
+        public static final int lang1=0x7f090000;
+        public static final int lang10=0x7f090009;
+        public static final int lang11=0x7f09000a;
+        public static final int lang12=0x7f09000b;
+        public static final int lang13=0x7f09000c;
+        public static final int lang2=0x7f090001;
+        public static final int lang3=0x7f090002;
+        public static final int lang4=0x7f090003;
+        public static final int lang5=0x7f090004;
+        public static final int lang6=0x7f090005;
+        public static final int lang7=0x7f090006;
+        public static final int lang8=0x7f090007;
+        public static final int lang9=0x7f090008;
+        public static final int languages=0x7f09000d;
+    }
     public static final class attr {
         /** 
     The size of the ad. It must be one of BANNER, FULL_BANNER, LEADERBOARD,
@@ -222,19 +238,19 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f020020;
         public static final int ic_plusone_standard_off_client=0x7f020021;
         public static final int ic_plusone_tall_off_client=0x7f020022;
-        public static final int lang_belarusian=0x7f020023;
-        public static final int lang_bosanski_latin=0x7f020024;
-        public static final int lang_deutsch=0x7f020025;
-        public static final int lang_english_uk=0x7f020026;
-        public static final int lang_english_usa=0x7f020027;
-        public static final int lang_espaol=0x7f020028;
-        public static final int lang_francais=0x7f020029;
-        public static final int lang_hrvatski=0x7f02002a;
-        public static final int lang_italiano=0x7f02002b;
-        public static final int lang_norsk=0x7f02002c;
-        public static final int lang_shqip=0x7f02002d;
-        public static final int lang_suomi=0x7f02002e;
-        public static final int lang_turkce=0x7f02002f;
+        public static final int lang_1=0x7f020023;
+        public static final int lang_10=0x7f020024;
+        public static final int lang_11=0x7f020025;
+        public static final int lang_12=0x7f020026;
+        public static final int lang_13=0x7f020027;
+        public static final int lang_2=0x7f020028;
+        public static final int lang_3=0x7f020029;
+        public static final int lang_4=0x7f02002a;
+        public static final int lang_5=0x7f02002b;
+        public static final int lang_6=0x7f02002c;
+        public static final int lang_7=0x7f02002d;
+        public static final int lang_8=0x7f02002e;
+        public static final int lang_9=0x7f02002f;
         public static final int languages=0x7f020030;
         public static final int login=0x7f020031;
         public static final int login_land=0x7f020032;
@@ -321,7 +337,7 @@ containing a value of this type.
         public static final int translation_3=0x7f03000b;
     }
     public static final class menu {
-        public static final int main=0x7f0a0000;
+        public static final int main=0x7f0b0000;
     }
     public static final class string {
         public static final int action_settings=0x7f06001b;
@@ -445,15 +461,15 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f090001;
+        public static final int AppTheme=0x7f0a0001;
         /**  ActionBar tabs text styles 
          */
-        public static final int MyActionBarTabText=0x7f090002;
-        public static final int RatingBar=0x7f090003;
+        public static final int MyActionBarTabText=0x7f0a0002;
+        public static final int RatingBar=0x7f0a0003;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.

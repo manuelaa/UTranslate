@@ -1,38 +1,17 @@
 package com.example.home1;
 
-public class Lang {
-	private String name;
-	private int iconID;
-	private int checkboxID;
-	private boolean selected;
-	
-	public Lang(String name, int iconID, int getcheckboxID){
-		super();
-		this.name=name;
-		this.iconID=iconID;
-		this.selected=selected;
-	}
-	
-	public String getName(){
-		return name;
-	}
+import android.content.Context;
 
-	public int getIconID() {
-		// TODO Auto-generated method stub
-		return iconID;
-	}
+public class Lang {
+	public String name;
+	public String id;
+	public int resourceId;
+	public int checkboxId;	
 	
-	public int getcheckboxID(){
-		return checkboxID;
-	}
-	
-	public boolean isSelected(){
-		return selected;
-	}
-	
-	public String toString(){
-		return this.name;
-		
-	}
-	
+	public Lang(String id, String name, Context context) {		
+		this.name = name;
+		this.id = id;
+		this.checkboxId = 0;		
+		this.resourceId = context.getResources().getIdentifier("lang_" + id, "drawable", context.getPackageName());
+	}	
 }

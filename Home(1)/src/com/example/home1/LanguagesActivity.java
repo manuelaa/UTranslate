@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class LanguagesActivity extends Activity /*implements OnCheckedChangeListener*/ {
-	private List<Lang> Languages = new ArrayList<Lang>();
+	private List<Lang> languages = new ArrayList<Lang>();
 	public String choosen;
 
 	public static int mLastCorrectPosition = -1;
@@ -42,33 +43,26 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 		});
 		
 		populateListView();
-		populateLangList();
-		
+		populateLangList();		
 		
 	}
 
 	private void populateLangList() {
-		// TODO Auto-generated method stub
-		Field[] fields = R.drawable.class.getFields();
-		final String PREFIX = "lang_";
-
-		int i=0;
-		for (Field f : fields) {
-				
-				if(f.getName()==null) break;
-				if (f.getName().contains(PREFIX)) {
-					Languages.add(new Lang(
-							f.getName().replace(PREFIX, ""), 
-							getApplicationContext().getResources().getIdentifier(f.getName(),"drawable",getApplicationContext().getPackageName()),
-							i));
-				i++;
+		//sagradi listu jezika	
+		TypedArray resLangs = getResources().obtainTypedArray(R.array.languages);		
+		for(int i = 0; i < resLangs.length(); i++) {
+			int arrayId = resLangs.getResourceId(i, 0);
+			if (arrayId > 0) {
+				String[] lang = getResources().getStringArray(arrayId);
+				languages.add(new Lang(lang[0], lang[1], this));
 			}
 		}
+		resLangs.recycle();
 	}
 
 	private void populateListView() {
 		// TODO Auto-generated method stub
-		ArrayAdapter<Lang> adapter = new MyListAdapter();
+		ArrayAdapter<Lang> adapter = new LanguageListAdapter();
 		ListView list = (ListView) findViewById(R.id.LangListView);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		list.setAdapter(adapter);
@@ -76,34 +70,30 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 		//list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 
-	private class MyListAdapter extends ArrayAdapter<Lang> {
-
-		public MyListAdapter() {
-			super(LanguagesActivity.this, R.layout.item_view, Languages); // base
-																		// class
-																			// called
+	private class LanguageListAdapter extends ArrayAdapter<Lang> {
+		public LanguageListAdapter() {
+			super(LanguagesActivity.this, R.layout.item_view, languages);
 		}
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			// Make sure we have a view to work with (may have been given null)
-			
+			// Make sure we have a view to work with (may have been given null)			
 			View itemView = convertView;
 			if (itemView == null)
 				itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
 
 			// find lang to work with
-			final Lang currentLang = Languages.get(position);
+			final Lang currentLang = languages.get(position);
 			
-			// fill the view
+			// fill the view	
 			ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
-			imageView.setImageResource(currentLang.getIconID());
+			imageView.setImageResource(currentLang.resourceId);
 
 			final ImageView imageView1 = (ImageView) itemView.findViewById(R.id.ibTest);
 
 			// Lang
 			TextView makeText = (TextView) itemView.findViewById(R.id.item_txtLang);
-			makeText.setText(currentLang.getName());
+			makeText.setText(currentLang.name);
 
 			// checkbox
 			final CheckBox checkB = (CheckBox) itemView.findViewById(R.id.CheckBox);
@@ -113,22 +103,22 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 			
 			checkB.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {	
+				public void onClick(View v) {					
 					SparseBooleanArray checked;
 					long[] checked_id;
 					//Lang currentLang = Languages.get(position);
 					Button newB = (Button)findViewById(R.id.bOK);
-			        newB.setText(currentLang.getName());
+			        newB.setText(currentLang.name);
 			        ImageButton newImB=(ImageButton)findViewById(R.id.ibTest);
-			        newImB.setImageResource(currentLang.getIconID());			      
+			        newImB.setImageResource(currentLang.resourceId);			      
 			        ListView list = (ListView) findViewById(R.id.LangListView);
 					 if (mLastCorrectPosition != -1) {
 	                    	//Lang lastLang = (Languages.get(mLastCorrectPosition));
 	                    	//CheckBox cb=(CheckBox)findViewById(lastLang.getcheckboxID());
-	                    	newB.setText(Languages.get(mLastCorrectPosition).getName()+"last");
+	                    	newB.setText(languages.get(mLastCorrectPosition).name+"last");
 	                    	
 	                    	if (checkB.isChecked()) {
-	                    		 newB.setText(Languages.get(mLastCorrectPosition).getName()+"-1");
+	                    		 newB.setText(languages.get(mLastCorrectPosition).name+"-1");
 	                    		// ((CheckBox)v).setChecked(true);
 	                    		// ((CheckBox)cb).setChecked(false);
 	                    		 
@@ -148,12 +138,12 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 
 					 	}
 	                   	else {
-		 			        newB.setText(Languages.get(position).getName());
+		 			        newB.setText(languages.get(position).name);
 		 			       }
 	                        
 		              checked = list.getCheckedItemPositions();
 		              mLastCorrectPosition = position;
-	             }   
+	             }  
 	           });
 
 

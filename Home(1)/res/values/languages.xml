@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="lang1">
+		<item name="id">1</item>
+		<item name="name">Belarusian</item>
+	</string-array>
+  	<string-array name="lang2">
+		<item name="id">2</item>
+		<item name="name">Bosanski Latin</item>
+	</string-array>
+	<string-array name="lang3">
+		<item name="id">3</item>
+		<item name="name">Deutsch</item>
+	</string-array>		
+	<string-array name="lang4">
+		<item name="id">4</item>
+		<item name="name">English UK</item>
+	</string-array>		
+	<string-array name="lang5">
+		<item name="id">5</item>
+		<item name="name">English USA</item>
+	</string-array>
+	<string-array name="lang6">
+		<item name="id">6</item>
+		<item name="name">Espanol</item>
+	</string-array>
+	<string-array name="lang7">
+		<item name="id">7</item>
+		<item name="name">Francais</item>
+	</string-array>	
+	<string-array name="lang8">
+		<item name="id">8</item>
+		<item name="name">Hrvatski</item>
+	</string-array>
+	<string-array name="lang9">
+		<item name="id">9</item>
+		<item name="name">Italiano</item>
+	</string-array>
+	<string-array name="lang10">
+		<item name="id">10</item>
+		<item name="name">Norsk</item>
+	</string-array>
+	<string-array name="lang11">
+		<item name="id">11</item>
+		<item name="name">Shqip</item>
+	</string-array>
+	<string-array name="lang12">
+		<item name="id">12</item>
+		<item name="name">Suomi</item>
+	</string-array>			
+	<string-array name="lang13">
+		<item name="id">13</item>
+		<item name="name">Turkce</item>
+	</string-array>		
+	<array name="languages">
+    	<item>@array/lang1</item>
+    	<item>@array/lang2</item>
+    	<item>@array/lang3</item>
+    	<item>@array/lang4</item>
+    	<item>@array/lang5</item>
+    	<item>@array/lang6</item>
+    	<item>@array/lang7</item>
+    	<item>@array/lang8</item>
+    	<item>@array/lang9</item>
+    	<item>@array/lang10</item>
+    	<item>@array/lang11</item>
+    	<item>@array/lang12</item>
+    	<item>@array/lang13</item>
+	</array>
+</resources>
