@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -113,42 +114,46 @@ public class LanguagesActivity extends Activity /*implements OnCheckedChangeList
 			checkB.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {	
-					Lang currentLang = Languages.get(position);
+					SparseBooleanArray checked;
+					long[] checked_id;
+					//Lang currentLang = Languages.get(position);
 					Button newB = (Button)findViewById(R.id.bOK);
 			        newB.setText(currentLang.getName());
-			        
-			       //choosen=currentLang.getName()+".jpg";
-			        
-			        
-			        // isprobavanje da li dohvaæa dobar id slike
-			        //radi ako se zada promjena na image button na activity languages list, ali ako ga usmjerim na ibUpitnik koji je u drugom activityju onda neæe
 			        ImageButton newImB=(ImageButton)findViewById(R.id.ibTest);
-			        newImB.setImageResource(currentLang.getIconID());
-			       
-
-					 // checkiranje koje skrši kad provjerava checkB.isChecked() -> ni isChecked ni setChecked neæe, ali toènu danju poziciju (bezveze sam stavila da 
-			        // se mijenja text na buttonu
+			        newImB.setImageResource(currentLang.getIconID());			      
+			        ListView list = (ListView) findViewById(R.id.LangListView);
 					 if (mLastCorrectPosition != -1) {
-	                    	Lang lastLang = (Languages.get(mLastCorrectPosition));
+	                    	//Lang lastLang = (Languages.get(mLastCorrectPosition));
 	                    	//CheckBox cb=(CheckBox)findViewById(lastLang.getcheckboxID());
 	                    	newB.setText(Languages.get(mLastCorrectPosition).getName()+"last");
-	                    	 
+	                    	
 	                    	if (checkB.isChecked()) {
 	                    		 newB.setText(Languages.get(mLastCorrectPosition).getName()+"-1");
-	                    		// cb.setChecked(false);
-	                    		 checkB.setChecked(true);
-	                        }//
+	                    		// ((CheckBox)v).setChecked(true);
+	                    		// ((CheckBox)cb).setChecked(false);
+	                    		 
+	                    		 	int len = list.getCount();
+	  		 			       		checked = list.getCheckedItemPositions();
+	  		 			       		checked_id=list.getCheckedItemIds();
+	  		 			       		for (int i = 0; i < len; i++){
+	  		 			       			if (checked.get(i) && i!=position) {
+	  		 			       				CheckBox cb=(CheckBox)findViewById((int)checked_id[i]);
+	  		 			       				((CheckBox)cb).setChecked(false);
+	  		 			       				//CheckBox cb1=(CheckBox)findViewById(position);
+	  		 			       			   //((CheckBox)cb1).setChecked(true);
+	  		 			        // do whatever you want with the checked item
+	  		 			       			}
+	                        }
 	                    }
-	                    else {
-	                    	//((CheckBox)findViewById(Languages.get(position).getcheckboxID())).setChecked(true);
-		                    
+
+					 	}
+	                   	else {
 		 			        newB.setText(Languages.get(position).getName());
-		 			        checkB.setChecked(true);
-	                    }               
-	                    mLastCorrectPosition = position;
-				}   
-				
-				
+		 			       }
+	                        
+		              checked = list.getCheckedItemPositions();
+		              mLastCorrectPosition = position;
+	             }   
 	           });
 
 
