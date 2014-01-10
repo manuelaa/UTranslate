@@ -1,6 +1,7 @@
 package com.example.home1;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class Connection {
-	public static final String WEB_SERVICE_URL = "http://192.168.0.20:48917/api/";
+	public static final String WEB_SERVICE_URL = "http://nihao.fer.hr/UTranslate/api/";
 	private static final String GOOGLE_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 	private static final int REQUEST_CODE_GOOGLE_AUTH_ERROR = 1001;
 	private static final int REQUEST_CODE_PLAY_SERVICE_ERROR = 1002;
@@ -129,7 +130,8 @@ public class Connection {
 			
 			@Override
 			protected Void doInBackground(Void... params) {
-				googleToken = getGoogleToken();
+				googleToken = getGoogleToken();	
+				System.out.println("TESTIRANJE GOOGLE: " + googleToken);
 				token = getToken();
 				return (Void)null;	
 			}
@@ -144,7 +146,9 @@ public class Connection {
 				token = "nekaj";
 				googleToken = "nekaj";
 				
-				if (token != null) {
+				System.out.println("TESTIRANJE - LOGIN USPJESAN, TOKEN: " + token);
+				
+				if (token != null && token != "") {
 					//login je uspio
 					System.out.println("TESTIRANJE - LOGIN USPJESAN, TOKEN: " + token);
 					
@@ -215,14 +219,17 @@ public class Connection {
 		if (googleToken == null) return null;
 				
 		Uri.Builder builder = Uri.parse(WEB_SERVICE_URL).buildUpon();
-		builder.appendPath("login");
+		builder.appendPath("Login");
+		builder.appendPath("Login");
 		builder.appendQueryParameter("googleToken", googleToken);		
 						
 		try {
-			String response = getResponse(builder.build().toString());			
+			String response = getResponse(builder.build().toString());
+			System.out.println("TESTIRANJE " + builder.build().toString());
 			if (response == null) return null;
 
 		    JSONObject json = new JSONObject(response);
+		    System.out.println("TESTIRANJE TOK-RESPONSE: " + response);
 		    return json.getString("token");	
 		} catch (JSONException ex) {
 			return null;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/languages"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageButton
+        android:id="@+id/imBack"
+        android:background="@null"
+        android:layout_width="48dp"
+        android:layout_height="51dp"
+        android:src="@drawable/back2" />
+
+</LinearLayout>

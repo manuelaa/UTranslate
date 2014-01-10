@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:orientation="vertical"
+        android:weightSum="100" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bLogin"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:layout_weight="30"
+        android:text="Login"
+        android:textColor="@color/button_post_text"
+        android:textColorHint="@color/button_login_text"
+        android:textSize="25sp" />
+
+    <Spinner
+        android:id="@+id/accountSpinner"
+        android:layout_width="191dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/bLogin"
+        android:layout_centerVertical="true"
+        android:layout_weight="9.57"
+        android:gravity="center_vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>

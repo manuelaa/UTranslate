@@ -13,24 +13,52 @@
         android:orientation="horizontal" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/userPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_launcher" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/UserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="korisnik1"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/langA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/trokut_small" />
+
+                <ImageView
+                    android:id="@+id/LangB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_launcher" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -40,8 +68,8 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView1"
-                android:layout_width="252dp"
+                android:id="@+id/askedText"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_margin="4dp"
                 android:text="Non parlo inglese" />
@@ -55,11 +83,12 @@
                     style="@style/RatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:scaleX="0.4"
-                    android:scaleY="0.4" />
+                    android:scaleX="0.6"
+                    android:scaleY="0.6" 
+                    android:stepSize="0.5"/>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/ddmmgggg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -69,6 +98,12 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
         </LinearLayout>
 
     </LinearLayout>

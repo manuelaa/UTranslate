@@ -52,7 +52,7 @@ public class Homepage extends Activity implements OnClickListener {
 			protected String doInBackground(Void... params) {
 				Connection.ProvjeriInicijalizaciju(Homepage.this);
 				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
-				builder.appendPath("login");			
+				builder.appendPath("Login");			
 				return Connection.callWebService(builder.build().toString());				
 			}			
 			@Override

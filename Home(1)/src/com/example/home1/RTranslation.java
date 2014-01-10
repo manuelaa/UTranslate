@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class RTranslation extends Activity {	
@@ -58,7 +59,7 @@ public class RTranslation extends Activity {
 	public ArrayList<Lang> checkedLanguagesTo;
 	private ImageButton toLanguageButton;
 	private static final int ACTIVITY_TO_LANGUAGE = 500;
-		
+	
 	//stvara file za sliku
 	private File createImageFile() throws IOException {
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
@@ -335,7 +336,6 @@ public class RTranslation extends Activity {
 				startActivityForResult(i, ACTIVITY_TO_LANGUAGE);
 			}
 		});
-		
 	}
 	
 	//sagradi listu jezika
@@ -355,5 +355,6 @@ public class RTranslation extends Activity {
 			}
 		}
 		resLangs.recycle();
+	
 	}
 }
