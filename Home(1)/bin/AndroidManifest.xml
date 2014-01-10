@@ -7,7 +7,7 @@
 	<uses-feature android:name="android.hardware.camera" android:required="true" />
     
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="18" />
         <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     	<uses-permission android:name="android.permission.NETWORK"/>
@@ -49,6 +49,17 @@
         <activity
             android:name="com.example.home1.Settings">
         </activity>  
+        
+        <activity
+            android:name="com.example.home1.Tr">
+        </activity> 
+        <activity
+            android:name="com.example.home1.Translation">
+        </activity> 
+        
+        <activity
+            android:name="com.example.home1.ListAdapter">
+        </activity>
         
         <meta-data android:name="com.google.android.gms.version"
            android:value="@integer/google_play_services_version" />

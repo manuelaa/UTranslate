@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
@@ -46,26 +47,22 @@ public class Homepage extends Activity implements OnClickListener {
 		specs.setIndicator("Translated");
 		th.addTab(specs);
 		
-		//TODO TESTIRANJE POZIVA WEB SERVISA		
-		AsyncTask<Void, Void, String> webTask = new AsyncTask<Void, Void, String>() {			
-			@Override
-			protected String doInBackground(Void... params) {
-				Connection.ProvjeriInicijalizaciju(Homepage.this);
-				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
-				builder.appendPath("Login");			
-				return Connection.callWebService(builder.build().toString());				
-			}			
+		//TODO TESTIRANJE POZIVA WEB SERVISA
+		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+		//builder.appendPath("Login");
+		//builder.appendPath("Get");
+		builder.appendPath("Languages");
+		builder.appendPath("GetLanguageName");						
+		WebServiceTask webTask = new WebServiceTask(Homepage.this, builder.build().toString(), "{languageId:3}", "Loading", "Please wait...") {
 			@Override
 			protected void onPostExecute(String result) {
-				if (result != null)
-					System.out.println("TESTIRANJE - REZULTAT: " + result);
-				else {
-					System.out.println("TESTIRANJE - LOGIN FAIL");
-					//TODO ODKOMENTIRAJ OVO DA BI SE KORISNIKA IZBACILO VAN JER NIJE LOGIRAN
-					//OVO JE TU ZAKOMENTIRANO DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
-					//Connection.errorLogout(Homepage.this);
-				}
-			}
+				super.onPostExecute(result);
+				
+				if (json != null) 
+					System.out.println("TESTIRANJE " + result); 
+				else 
+					System.out.println("TESTIRANJE NULL");
+			}				
 		};		
 		webTask.execute((Void)null);		
 	}
@@ -79,13 +76,11 @@ public class Homepage extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()){
 		case (R.id.ibNewMes):
 			Intent i = new Intent(this,RTranslation.class);
 			startActivity(i);
-			break;
-		
+			break;		
 		}
 	}
 }

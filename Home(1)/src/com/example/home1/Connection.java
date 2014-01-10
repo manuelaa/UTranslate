@@ -2,6 +2,7 @@ package com.example.home1;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Console;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,8 +132,7 @@ public class Connection {
 			
 			@Override
 			protected Void doInBackground(Void... params) {
-				googleToken = getGoogleToken();	
-				System.out.println("TESTIRANJE GOOGLE: " + googleToken);
+				googleToken = getGoogleToken();					
 				token = getToken();
 				return (Void)null;	
 			}
@@ -141,16 +142,8 @@ public class Connection {
 				loginButton.setEnabled(true);
 				loginProgress.dismiss();
 				
-				//TODO MAKNI DA BI LOGIN FUNKCIONIRAO
-				//OVO JE TU DA SE NE MORA LOGIRATI DOK WEB SERVIS JOS NIJE GOTOV
-				token = "nekaj";
-				googleToken = "nekaj";
-				
-				System.out.println("TESTIRANJE - LOGIN USPJESAN, TOKEN: " + token);
-				
 				if (token != null && token != "") {
 					//login je uspio
-					System.out.println("TESTIRANJE - LOGIN USPJESAN, TOKEN: " + token);
 					
 					//sejvaj postavke da se moze obnoviti connection kad se app ponovno pokrene
 					try {
@@ -225,11 +218,9 @@ public class Connection {
 						
 		try {
 			String response = getResponse(builder.build().toString());
-			System.out.println("TESTIRANJE " + builder.build().toString());
 			if (response == null) return null;
 
 		    JSONObject json = new JSONObject(response);
-		    System.out.println("TESTIRANJE TOK-RESPONSE: " + response);
 		    return json.getString("token");	
 		} catch (JSONException ex) {
 			return null;
@@ -256,7 +247,8 @@ public class Connection {
 	
 	//poziva URL i vraca response kao string
 	//ako dodje do bilo kakve greske vraca null
-	private static String getResponse(String urlPath)
+	//ako je postData == null koristi cisti GET, inace dodaje postData i koristi POST
+	private static String getResponse(String urlPath, String postData)
 	{	
 		HttpURLConnection con = null;
 		URL url = null;
@@ -269,9 +261,25 @@ public class Connection {
 		}
 				
 		try {
-	        con = (HttpURLConnection)url.openConnection();
-			lastResponseCode = con.getResponseCode();
+	        con = (HttpURLConnection)url.openConnection();	        
+	        con.setDoOutput(true);
+	        con.setDoInput(true);
+	        con.setInstanceFollowRedirects(false);
+	        con.setUseCaches (false);
 	        
+	        if (postData != null) {
+	        	byte[] data = postData.getBytes(Charset.forName("UTF-8"));
+	        	con.setRequestMethod("POST"); 
+	        	con.setRequestProperty("Content-Type", "application/json"); 
+	        	con.setRequestProperty("charset", "utf-8");
+	        	con.setRequestProperty("Content-Length", "" + Integer.toString(data.length));
+		        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());
+		        dataOutputStream.write(data);		        
+		        dataOutputStream.close();
+	        }
+	        
+			lastResponseCode = con.getResponseCode();
+				        
 	        if (lastResponseCode == 200) {
 	            InputStream is = con.getInputStream();            
 	            String response = readOutput(is);
@@ -293,10 +301,16 @@ public class Connection {
 		}
 	}
 	
+	//kao i getResponse ali uvijek koristi cisti GET
+	private static String getResponse(String urlPath) {
+		return getResponse(urlPath, null);	
+	}
+	
 	//poziva URL i vraca response kao string
 	//razlika u odnosu na getResponse je da dodaje nas token u http headere
 	//ako dodje do bilo kakve greske vraca null
-	private static String getResponseWithToken(String urlPath)
+	//ako je postData == null koristi cisti GET, inace dodaje postData i koristi POST
+	private static String getResponseWithToken(String urlPath, String postData)
 	{	
 		if (token == null) {
 			lastResponseCode = 0;
@@ -315,16 +329,35 @@ public class Connection {
 						
 		try {
 			con = (HttpURLConnection)url.openConnection();
-	        con.addRequestProperty("Authorization", token);	        	      
+	        con.addRequestProperty("Authorization", token);
+	        con.setDoOutput(true);
+	        con.setDoInput(true);
+	        con.setInstanceFollowRedirects(false);
+	        con.setUseCaches (false);
+	        	        
+	        if (postData != null) {
+	        	byte[] data = postData.getBytes(Charset.forName("UTF-8"));
+	        	con.setRequestMethod("POST"); 
+	        	con.setRequestProperty("Content-Type", "application/json"); 
+	        	con.setRequestProperty("charset", "utf-8");
+	        	con.setRequestProperty("Content-Length", Integer.toString(data.length));
+		        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());
+		        dataOutputStream.write(data);		        
+		        dataOutputStream.close();
+	        }
+	        
 	        lastResponseCode = con.getResponseCode();
 	        
 	        if (lastResponseCode == 200) {
 	            InputStream is = con.getInputStream();            
 	            String response = readOutput(is);
-	            is.close();	                       
+	            is.close();
+	            con.disconnect();
 	            return response;
-	        } else
+	        } else {
+	        	con.disconnect();
 	        	return null;
+	        }
 		} catch(IOException ex) {	
 			if (!ex.getMessage().contains("connect failed")) {
 				try {
@@ -334,11 +367,16 @@ public class Connection {
 				}
 			} else
 				lastResponseCode = 0;
-						
+			
+			if (con != null) con.disconnect();			
 			return null;		
 		}
 	}
 	
+	//kao i getResponseWithToken ali uvijek koristi cisti GET
+	private static String getResponseWithToken(String urlPath) {
+		return getResponseWithToken(urlPath, null);
+	}
 	
 	//ako se aplikacija srusi onda postoji mogucnost da ne ode odmah na Login activity
 	//i na taj nacin se ova klasa ne inicijalizira
@@ -357,28 +395,32 @@ public class Connection {
 	//ako nam je token istekao pokusati ce ga obnoviti i opet pozvati web servis
 	//ako ne uspije obnoviti vraca null
 	//ne pozivati izravno nego uvijek preko background threada
-	public static String callWebService(String urlPath)
+	//ako je postData == null koristi cisti GET, inace dodaje postData i koristi POST
+	public static String callWebService(String urlPath, String postData)
 	{		
-		String response = getResponseWithToken(urlPath);
+		String response = getResponseWithToken(urlPath, postData);
 		
 		if (response == null) {
 			if (googleToken != null) GoogleAuthUtil.invalidateToken(loginActivity, googleToken);
 			googleToken = getGoogleToken();			
 			token = getToken();
-			response = getResponseWithToken(urlPath);			
+			response = getResponseWithToken(urlPath, postData);			
 		}
 		
 		return response;
 	}
 	
-
+	//kao i callWebService ali uvijek koristi cisti GET
+	public static String callWebService(String urlPath)
+	{				
+		return callWebService(urlPath, null);
+	}	
+	
 	//ako se negdje kasnije dogodila greska - callWebService je vratio null nakon oba 2 pokusaja
 	//sa ovom funkcijom se pokazuje korisniku da je doslo do greske i baca ga se nazad na login
 	public static void errorLogout(final Activity activity) 
 	{
 		//ako je do greske doslo zbog tokena a ne zbog IOExceptiona, spremi da vise nije connectan		
-		//System.out.println("TESTIRANJE - errorLogout: lastResponseCode: " + lastResponseCode);
-		
 		if (lastResponseCode != 0) {
 			try {
 				FileOutputStream fos = activity.openFileOutput(CONNECTION_FILE, Context.MODE_PRIVATE);
