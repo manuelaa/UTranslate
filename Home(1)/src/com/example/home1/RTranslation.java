@@ -39,7 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-public class RTranslation extends Activity {	
+public class RTranslation extends Activity implements OnClickListener {	
 	//podaci za dodavanje slike na request
 	private final CharSequence[] pictureDialogOptions = {"Take a photo with camera", "Existing photo", "Remove photo"};
 	private AlertDialog pictureDialog;
@@ -360,6 +360,12 @@ public class RTranslation extends Activity {
 			}
 		});
 		
+		
+		
+		//bezvezegumb kojeg ostavi za testiranje drugih listviewova
+		Button button= (Button)findViewById(R.id.button1);
+		button.setOnClickListener(RTranslation.this);
+		
 		//gumb za postanje		
 		postButton = (Button) findViewById(R.id.bPost);
 		editText = (EditText) findViewById(R.id.editText1);
@@ -506,5 +512,16 @@ public class RTranslation extends Activity {
 			}				
 		};		
 		webTask.execute((Void)null);		
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()){
+		case (R.id.button1):
+			Intent i = new Intent(this,SimilarR.class);
+			startActivity(i);
+			break;
+		}
 	}
 }
