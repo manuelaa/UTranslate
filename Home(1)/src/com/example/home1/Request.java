@@ -20,7 +20,7 @@ public class Request {
 	public String pictureFilePath = null;
 	
 	public int idLang1, idLang2;
-	public Timestamp timePosted;	
+	public String timePosted;	
 	public boolean notification;
 	
 	//id-evi slika zastavica
@@ -28,8 +28,9 @@ public class Request {
 	public int resourceIdLang2;
 
 	
-	public Request(Context context, long userId, long requestId, String text, String audioURLPath, String pictureURLPath, int idLang1, int idLang2, Timestamp timePosted, boolean notification) {
+	public Request(Context context, long userId, long requestId, String text, String audioURLPath, String pictureURLPath, int idLang1, int idLang2, String timePosted, boolean notification) {
 		this.userId = userId;
+		this.requestId = requestId;
 		this.text = text;
 		this.audioURLPath = audioURLPath;
 		this.pictureURLPath = pictureURLPath;

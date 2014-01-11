@@ -33,24 +33,18 @@ public class Tr extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		/* TODO TESTING */
-		request = new Request(this, 1, 3, "tekst", null, null, 2, 1, null, false);
+		//(Context context, long userId, long requestId, String text, String audioURLPath, String pictureURLPath, int idLang1, int idLang2, String timePosted, boolean notification) {
+		request = new Request(this, 1, 1, "tekst", null, null, 2, 4, "1.1.2014.", false);
 		
 		setContentView(R.layout.translation_3);
 		LoadRequest();
 		LoadAnswers();
 		populateListView();
 	}
-
-	/*
-	private void populateList() { 
-		texts.add(new Text("Korisnik1", R.drawable.ic_launcher, "asydfhgfh", R.drawable.lang_10, R.drawable.lang_11));
-		texts.add(new Text("Korisnik2", R.drawable.ic_launcher, "etrzui", R.drawable.lang_1, R.drawable.lang_12));
-		texts.add(new Text("Korisnik3", R.drawable.ic_launcher, "gfghjkl", R.drawable.lang_7, R.drawable.lang_3));
-	}*/
 	
 	//ucitava request
 	private void LoadRequest() {
-		
+		TextView reqText = (TextView)findViewById(R.id.tv_show);
 		
 	}
 	
@@ -63,25 +57,34 @@ public class Tr extends Activity {
 		JSONObject obj = new JSONObject();
 		try {
 			obj.put("Id", request.requestId);
+			obj.put("languageTold", request.idLang2);			
 		} catch (JSONException e) {			
 			return;
 		}
-		
+				
 		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading", "Please wait...") {
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
 				
-				if (json != null) {
+				if (result != null) {
 					JSONArray jsonArray = (JSONArray)json;
 					for(int i = 0; i < jsonArray.length(); i++) {
 						try {
 							JSONObject obj = jsonArray.getJSONObject(i);
 							Text newAnswer = new Text();						
 							newAnswer.text = obj.getString("Text");
-							if (obj.get("audioExstension") != JSONObject.NULL)
+							//newAnswer.timePosted = Timestamp. obj.getString("timePosted");
+							newAnswer.rating = (float)obj.getDouble("rate");							
+							if (obj.get("audioExtension") != JSONObject.NULL)
 								newAnswer.audioURLPath = obj.getString("audio");
+
+							/* TODO user klasa */
+							newAnswer.username = "test";
+							
+							answers.add(newAnswer);							
 						} catch (JSONException e) {
+							System.out.println("TESTIRANJE GRESKA " + e.getMessage());
 						}						
 					}					
 				}
@@ -91,7 +94,6 @@ public class Tr extends Activity {
 	}
 	
 	private void populateListView() {
-		// TODO Auto-generated method stub
 		ArrayAdapter<Text> adapter = new ListAdapter();
 		ListView list=(ListView) findViewById(R.id.listViewT);
 		list.setAdapter(adapter);
@@ -121,12 +123,13 @@ public class Tr extends Activity {
 	
 			TextView aText = (TextView)itemView.findViewById(R.id.askedText);
 			aText.setText(current.text);
-	
+				
 			ImageView LangA = (ImageView)itemView.findViewById(R.id.langA);			
-			LangA.setImageDrawable(getResources().getDrawable(current.resourceIdLang1));
+			LangA.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 			
 			ImageView LangB = (ImageView)itemView.findViewById(R.id.LangB);
-			LangB.setImageDrawable(getResources().getDrawable(current.resourceIdLang2));
+			LangB.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+			
 						
 			/*
 			RatingBar rb = (RatingBar) itemView.findViewById(R.id.ratingBar1);

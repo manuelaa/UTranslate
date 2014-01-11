@@ -67,8 +67,8 @@ public class Homepage extends Activity implements OnClickListener {
 		webTask.execute((Void)null);
 		
 		/* TODO TESTING */
-		/*Intent i = new Intent(this, Tr.class);
-		startActivity(i);*/
+		//Intent i = new Intent(this, Tr.class);
+		//startActivity(i);
 	}
 
 	@Override
