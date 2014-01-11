@@ -33,30 +33,18 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" >
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
 
-                <ImageView
-                    android:id="@+id/langA"
+                <Button
+                    android:id="@+id/button1"
+                    style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_launcher" />
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/trokut_small" />
-
-                <ImageView
-                    android:id="@+id/LangB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_launcher" />
+                    android:text="Rate" />
 
             </LinearLayout>
 
@@ -98,12 +86,6 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
         </LinearLayout>
 
     </LinearLayout>

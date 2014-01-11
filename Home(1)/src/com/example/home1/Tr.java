@@ -15,7 +15,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -26,6 +28,9 @@ public class Tr extends Activity {
 	
 	//koji request prikazujem
 	public static Request request;	
+	
+	private ImageButton btnPicture;
+	private ImageButton btnAudio;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,32 @@ public class Tr extends Activity {
 	//ucitava request
 	private void LoadRequest() {
 		TextView reqText = (TextView)findViewById(R.id.tv_show);
+		reqText.setText(request.text);
 		
+		btnPicture = (ImageButton) findViewById(R.id.ibCam);
+		if (request.pictureURLPath == null)
+			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_2));
+		else
+			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));		
+		btnPicture.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				
+			}
+		});
+
+		btnAudio = (ImageButton) findViewById(R.id.ibSound);
+		if (request.audioURLPath == null)
+			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_2));
+		else
+			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));		
+		btnAudio.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				
+			}
+		});
+
 	}
 	
 	//ucitava odgovore
@@ -61,6 +91,8 @@ public class Tr extends Activity {
 		} catch (JSONException e) {			
 			return;
 		}
+		
+		System.out.println("TESTIRANJE " + obj.toString());
 				
 		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading", "Please wait...") {
 			@Override
@@ -95,12 +127,11 @@ public class Tr extends Activity {
 	
 	private void populateListView() {
 		ArrayAdapter<Text> adapter = new ListAdapter();
-		ListView list=(ListView) findViewById(R.id.listViewT);
+		ListView list=(ListView) findViewById(R.id.listView1);
 		list.setAdapter(adapter);
  	}
 	
 	private class ListAdapter extends ArrayAdapter<Text> {
-
 		public ListAdapter() {
 			super(Tr.this, R.layout.item_view_translation, answers);
 		}
@@ -111,8 +142,7 @@ public class Tr extends Activity {
 			View itemView = convertView;
 			if(itemView == null)
 				itemView = getLayoutInflater().inflate(R.layout.item_view_translation, parent, false);
-		
-		
+				
 			Text current = answers.get(position);
 			
 			TextView userN = (TextView)itemView.findViewById(R.id.UserName);
@@ -123,18 +153,20 @@ public class Tr extends Activity {
 	
 			TextView aText = (TextView)itemView.findViewById(R.id.askedText);
 			aText.setText(current.text);
-				
+			
+			/*
 			ImageView LangA = (ImageView)itemView.findViewById(R.id.langA);			
 			LangA.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 			
 			ImageView LangB = (ImageView)itemView.findViewById(R.id.LangB);
-			LangB.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+			LangB.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));								
+			*/
 			
-						
 			/*
 			RatingBar rb = (RatingBar) itemView.findViewById(R.id.ratingBar1);
 			rb.setRating(0);
 			*/
+			
 			return itemView;
 		}
 	}
