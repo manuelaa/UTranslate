@@ -43,6 +43,7 @@ import com.google.android.gms.internal.ex;
 
 public class Connection {
 	public static final String WEB_SERVICE_URL = "http://nihao.fer.hr/UTranslate/api/";
+	//public static final String WEB_SERVICE_URL = "http://192.168.0.20:51505/api/";	
 	
 	private static final String GOOGLE_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 	private static final int REQUEST_CODE_GOOGLE_AUTH_ERROR = 1001;
@@ -426,17 +427,18 @@ public class Connection {
         	con.setRequestProperty("charset", "utf-8");
         	con.setRequestProperty("Content-Length", Long.toString(filePostData.length()));        	
         	
-	        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());		        		        
-		    DataInputStream dis = new DataInputStream(new FileInputStream(filePostData));
+	        BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());		        		        
+		    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filePostData));
 			byte[] bytes = new byte[300000];			
 			int count = 0;
 			while(true) {
-				count = dis.read(bytes, 0, bytes.length);
+				count = bis.read(bytes);
 				if (count == -1) break;
-				dataOutputStream.write(bytes, 0, count);				
+				bos.write(bytes, 0, count);
+				bos.flush();
 			}
-			dis.close();
-			dataOutputStream.close();
+			bis.close();
+			bos.close();
 			
 	        lastResponseCode = con.getResponseCode();
 	        
@@ -555,9 +557,7 @@ public class Connection {
 	//pretvara file utf8 string i dodaje u POST stream
 	//koristi se za dodavanje slike i zvuka u json objekt
 	//posto se bufferano ucitava zadaje se stream (file)
-	public static void AddFileToJSON(Activity activity, BufferedOutputStream stream, String filePath, String jsonName, String jsonExtension) {		
-		System.out.println("TESTIRANJE " + filePath);
-		
+	public static void AddFileToJSON(Activity activity, BufferedOutputStream stream, String filePath, String jsonName, String jsonExtension) {				
 		try {
 			if (filePath == null) {				
 				stream.write(("\"" + jsonName + "\": \"\",").getBytes(Charset.forName("UTF-8")));

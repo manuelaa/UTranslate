@@ -39,7 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-public class RTranslation extends Activity implements OnClickListener {	
+public class RTranslation extends Activity {	
 	//podaci za dodavanje slike na request
 	private final CharSequence[] pictureDialogOptions = {"Take a photo with camera", "Existing photo", "Remove photo"};
 	private AlertDialog pictureDialog;
@@ -72,6 +72,8 @@ public class RTranslation extends Activity implements OnClickListener {
 	public ArrayList<Lang> checkedLanguagesTo;
 	private ImageButton toLanguageButton;
 	private static final int ACTIVITY_TO_LANGUAGE = 500;
+	
+	private static final int ACTIVITY_SIMILAR_REQUEST = 600;
 	
 	private Button postButton;
 	private EditText editText;
@@ -246,6 +248,9 @@ public class RTranslation extends Activity implements OnClickListener {
 	    		else
 	    			toLanguageButton.setImageDrawable(getResources().getDrawable(R.drawable.upitnik1));
 	    	}	    	
+	    } else if (requestCode == ACTIVITY_SIMILAR_REQUEST) {
+	    	//zavrsio je odabir slicnog requesta
+	    	dodajRequest(SimilarR.similarRequestId);
 	    }
 	}
 	
@@ -360,26 +365,24 @@ public class RTranslation extends Activity implements OnClickListener {
 			}
 		});
 		
-		
-		
-		//bezvezegumb kojeg ostavi za testiranje drugih listviewova
-		Button button= (Button)findViewById(R.id.button1);
-		button.setOnClickListener(RTranslation.this);
-		
+				
 		//gumb za postanje		
 		postButton = (Button) findViewById(R.id.bPost);
 		editText = (EditText) findViewById(R.id.editText1);
 		postButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO upali ovu provjeri i izbrisi ono ispod
-				//if (checkedLanguagesFrom.size() == 0 || checkedLanguagesTo.size() == 0 || editText.getText().toString() == "")
-				//	return;
+				//provjera da li je sve uneseno
+				if (checkedLanguagesFrom.size() == 0 || checkedLanguagesTo.size() == 0 || editText.getText().toString() == "")
+					return;
 				
+				/* za testiranje */
+				/*				
 				checkedLanguagesFrom.add(languagesFrom.get(0));
 				checkedLanguagesTo.add(languagesFrom.get(1));
 				checkedLanguagesTo.add(languagesFrom.get(2));
 				editText.setText("bok");
+				*/
 				
 				//prvo treba naci da li ima slicnih requestova
 				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
@@ -408,7 +411,7 @@ public class RTranslation extends Activity implements OnClickListener {
 						if (result != null && json == null)
 							dodajRequest(null);
 						else if (result != null && json != null)
-							prikaziSlicne(json);							
+							prikaziSlicne((JSONArray)json);							
 					}				
 				};		
 				webTask.execute((Void)null);	
@@ -435,13 +438,26 @@ public class RTranslation extends Activity implements OnClickListener {
 		resLangs.recycle();	
 	}
 	
-	private void prikaziSlicne(JSONObject json) {
+	//prikazi listu slicnih requestova da korisnik odabere
+	private void prikaziSlicne(JSONArray json) {
+		SimilarR.similarRequests.clear();
 		
-		
+		try {
+			JSONObject jsonObject;
+			for(int i = 0; i < json.length(); i++)
+			{
+				jsonObject = json.getJSONObject(i);
+				SimilarR.similarRequests.add(new Similar(this, Integer.parseInt(jsonObject.getString("requestId")), jsonObject.getString("text"), jsonObject.getString("languageTold")));
+			}
+			
+			Intent i = new Intent(RTranslation.this, SimilarR.class);				
+			startActivityForResult(i, ACTIVITY_SIMILAR_REQUEST);
+		} catch (JSONException e) {
+		}
 	}
 
 	//dodaje novi request i salje se similarId (null ako nema slicnog)
-	private void dodajRequest(Integer similarId) {
+	private void dodajRequest(Long similarId) {
 		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
 		builder.appendPath("Requests");
 		builder.appendPath("UpdateRequest");
@@ -489,7 +505,6 @@ public class RTranslation extends Activity implements OnClickListener {
 					stream.write(',');					
 					Connection.AddFileToJSON(RTranslation.this, stream, audioPath, "audio", "audioExtension");
 					stream.write('}');
-					stream.write('\0');
 					stream.close();
 					
 					ret = Connection.callWebServicePostFile(url, tmpJson);					
@@ -512,16 +527,5 @@ public class RTranslation extends Activity implements OnClickListener {
 			}				
 		};		
 		webTask.execute((Void)null);		
-	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()){
-		case (R.id.button1):
-			Intent i = new Intent(this,SimilarR.class);
-			startActivity(i);
-			break;
-		}
 	}
 }

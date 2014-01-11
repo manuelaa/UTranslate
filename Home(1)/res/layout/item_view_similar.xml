@@ -17,6 +17,13 @@
         android:orientation="horizontal"
         android:weightSum="100" >
 
+        <ImageView
+            android:id="@+id/ivSimilarFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/vise_jezika" />
+
         <TextView
             android:id="@+id/item_txtSimilar"
             android:layout_width="match_parent"
@@ -24,18 +31,8 @@
             android:gravity="center|left"
             android:paddingLeft="7dp"
             android:text="Bok bok"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/item_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="15"
-            android:adjustViewBounds="true"
-            android:gravity="center"
-            android:maxHeight="80dp"
-            android:maxWidth="45dp" />
+            android:textSize="20sp"
+            android:singleLine="true" />
 
 
     </LinearLayout>

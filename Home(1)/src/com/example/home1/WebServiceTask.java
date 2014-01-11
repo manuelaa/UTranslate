@@ -1,5 +1,6 @@
 package com.example.home1;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +18,8 @@ public class WebServiceTask extends AsyncTask<Void, Void, String> {
 	protected Activity activity = null;
 	protected String postData = null;
 	protected String url = null;	
-	protected JSONObject json = null;
+	
+	protected Object json = null;
 	
 	public WebServiceTask(Activity activity, String url, String postData, String dialogTitle, String dialogMessage) {
 		if (dialogTitle != null) {
@@ -58,11 +60,14 @@ public class WebServiceTask extends AsyncTask<Void, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (dialog != null) dialog.dismiss();
-		
+				
 		if (result != null)
 			try {
-				json = new JSONObject(result);
-			} catch (JSONException e) {				
+				if (result.charAt(0) == '[')					
+					json = new JSONArray(result);
+				else
+					json = new JSONObject(result);
+			} catch (JSONException e) {	
 				json = null;
 			}
 		else

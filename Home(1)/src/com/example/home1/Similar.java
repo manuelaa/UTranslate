@@ -1,14 +1,17 @@
 package com.example.home1;
 
+import android.content.Context;
+
 public class Similar {
-	private String written;
+	public long requestId;
+	public String text;
 	
-	public Similar(String written){
-		super();
-		this.written=written;
-	}
+	//za prikaz zastavice jezika na koji ide
+	public int resourceId;
 	
-	public String getWritten(){
-		return written;
+	public Similar(Context context, long requestId, String text, String langId){		
+		this.requestId = requestId;
+		this.text = text;
+		this.resourceId = context.getResources().getIdentifier("lang_" + langId, "drawable", context.getPackageName());
 	}
 }

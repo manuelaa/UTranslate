@@ -12,16 +12,26 @@
         android:layout_marginTop="45dp" >
 
         <ImageView
-            android:id="@+id/userPhoto"
+            android:id="@+id/group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/didd" />
+            android:src="@drawable/group"
+            android:padding="3dp" />
 
         <ListView
             android:id="@+id/lvSimilar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="315dp" >
         </ListView>
+
+        <Button
+            android:id="@+id/bNewG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:background="@color/button_post"
+            android:text="New" />
 
     </LinearLayout>
 
