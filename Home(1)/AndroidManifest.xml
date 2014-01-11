@@ -7,7 +7,7 @@
 	<uses-feature android:name="android.hardware.camera" android:required="true" />
     
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
         <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     	<uses-permission android:name="android.permission.NETWORK"/>
@@ -24,7 +24,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.home1.Login"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,33 +33,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.home1.RTranslation">
+            android:name="com.example.home1.RTranslation"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.example.home1.LanguagesList">
+            android:name="com.example.home1.LanguagesList"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.example.home1.Homepage">
+            android:name="com.example.home1.Homepage"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.example.home1.LanguagesActivity">
+            android:name="com.example.home1.LanguagesActivity"
+            android:screenOrientation="portrait">
         </activity>
  		 <activity
-            android:name="com.example.home1.LanguagesArrayAdapter">
+            android:name="com.example.home1.LanguagesArrayAdapter"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.example.home1.Settings">
+            android:name="com.example.home1.Settings"
+            android:screenOrientation="portrait">
         </activity>  
         
         <activity
-            android:name="com.example.home1.Tr">
+            android:name="com.example.home1.Tr"
+            android:screenOrientation="portrait">
         </activity> 
         <activity
-            android:name="com.example.home1.Translation">
+            android:name="com.example.home1.Translation"
+            android:screenOrientation="portrait">
         </activity> 
         
         <activity
-            android:name="com.example.home1.ListAdapter">
+            android:name="com.example.home1.ListAdapter"
+            android:screenOrientation="portrait">
         </activity>
         
         <meta-data android:name="com.google.android.gms.version"

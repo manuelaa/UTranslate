@@ -44,7 +44,8 @@ public class LanguagesActivity extends Activity {
 		backB.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				pokusajIzaci();			}
+				pokusajIzaci();
+			}
 		});		
 	}
 	

@@ -13,8 +13,8 @@ import android.os.AsyncTask;
 //treba ga se koristiti kod pozivanja s tim da se overridea onPostExecute() u kojem se radi obrada
 //jedino je bitno da se pozove i onPostExecute bazne klase!
 public class WebServiceTask extends AsyncTask<Void, Void, String> {			
-	private ProgressDialog dialog = null;
-	private Activity activity = null;
+	protected ProgressDialog dialog = null;
+	protected Activity activity = null;
 	protected String postData = null;
 	protected String url = null;	
 	protected JSONObject json = null;
@@ -63,7 +63,7 @@ public class WebServiceTask extends AsyncTask<Void, Void, String> {
 			try {
 				json = new JSONObject(result);
 			} catch (JSONException e) {				
-				Connection.errorLogout(activity);
+				json = null;
 			}
 		else
 			Connection.errorLogout(activity);

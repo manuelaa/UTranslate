@@ -11,7 +11,7 @@ public class Lang {
 	
 	public Lang(String id, String name, Context context) {		
 		this.name = name;
-		this.id = id;
+		this.id = id;		
 		this.checked = false;	
 		this.resourceId = context.getResources().getIdentifier("lang_" + id, "drawable", context.getPackageName());
 	}	

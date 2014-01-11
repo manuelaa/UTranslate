@@ -1,8 +1,12 @@
 package com.example.home1;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Console;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +29,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.util.Base64;
 import android.widget.Button;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -33,9 +39,11 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.internal.ex;
 
 public class Connection {
 	public static final String WEB_SERVICE_URL = "http://nihao.fer.hr/UTranslate/api/";
+	
 	private static final String GOOGLE_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 	private static final int REQUEST_CODE_GOOGLE_AUTH_ERROR = 1001;
 	private static final int REQUEST_CODE_PLAY_SERVICE_ERROR = 1002;
@@ -134,6 +142,8 @@ public class Connection {
 			protected Void doInBackground(Void... params) {
 				googleToken = getGoogleToken();					
 				token = getToken();
+				System.out.println("TESTIRANJE googleToken: " + googleToken);
+				System.out.println("TESTIRANJE token: " + token);
 				return (Void)null;	
 			}
 			
@@ -244,7 +254,7 @@ public class Connection {
                    
         return response;		
 	}
-	
+		
 	//poziva URL i vraca response kao string
 	//ako dodje do bilo kakve greske vraca null
 	//ako je postData == null koristi cisti GET, inace dodaje postData i koristi POST
@@ -261,18 +271,18 @@ public class Connection {
 		}
 				
 		try {
-	        con = (HttpURLConnection)url.openConnection();	        
-	        con.setDoOutput(true);
-	        con.setDoInput(true);
+	        con = (HttpURLConnection)url.openConnection();	        	        
 	        con.setInstanceFollowRedirects(false);
-	        con.setUseCaches (false);
+	        con.setUseCaches(false);
 	        
-	        if (postData != null) {
+	        if (postData != null) {	        	
+		        con.setDoInput(true);
+		        con.setDoOutput(true);
 	        	byte[] data = postData.getBytes(Charset.forName("UTF-8"));
 	        	con.setRequestMethod("POST"); 
 	        	con.setRequestProperty("Content-Type", "application/json"); 
 	        	con.setRequestProperty("charset", "utf-8");
-	        	con.setRequestProperty("Content-Length", "" + Integer.toString(data.length));
+	        	con.setRequestProperty("Content-Length", Integer.toString(data.length));
 		        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());
 		        dataOutputStream.write(data);		        
 		        dataOutputStream.close();
@@ -283,10 +293,13 @@ public class Connection {
 	        if (lastResponseCode == 200) {
 	            InputStream is = con.getInputStream();            
 	            String response = readOutput(is);
-	            is.close();	                       
+	            is.close();
+	            con.disconnect();
 	            return response;
-	        } else
+	        } else {
+	        	con.disconnect();
 	        	return null;
+	        }	        	
 		} catch(IOException ex) {
 			if (!ex.getMessage().contains("connect failed")) {
 				try {
@@ -297,6 +310,7 @@ public class Connection {
 			} else
 				lastResponseCode = 0;		
 			
+			if (con != null) con.disconnect();
 			return null;		
 		}
 	}
@@ -305,6 +319,7 @@ public class Connection {
 	private static String getResponse(String urlPath) {
 		return getResponse(urlPath, null);	
 	}
+	
 	
 	//poziva URL i vraca response kao string
 	//razlika u odnosu na getResponse je da dodaje nas token u http headere
@@ -329,19 +344,19 @@ public class Connection {
 						
 		try {
 			con = (HttpURLConnection)url.openConnection();
-	        con.addRequestProperty("Authorization", token);
-	        con.setDoOutput(true);
-	        con.setDoInput(true);
+	        con.addRequestProperty("Authorization", token);       
 	        con.setInstanceFollowRedirects(false);
 	        con.setUseCaches (false);
 	        	        
 	        if (postData != null) {
+	        	con.setDoInput(true);
+		        con.setDoOutput(true);	 
 	        	byte[] data = postData.getBytes(Charset.forName("UTF-8"));
 	        	con.setRequestMethod("POST"); 
 	        	con.setRequestProperty("Content-Type", "application/json"); 
 	        	con.setRequestProperty("charset", "utf-8");
 	        	con.setRequestProperty("Content-Length", Integer.toString(data.length));
-		        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());
+		        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());		        
 		        dataOutputStream.write(data);		        
 		        dataOutputStream.close();
 	        }
@@ -376,6 +391,78 @@ public class Connection {
 	//kao i getResponseWithToken ali uvijek koristi cisti GET
 	private static String getResponseWithToken(String urlPath) {
 		return getResponseWithToken(urlPath, null);
+	}
+	
+	//poziva URL i vraca response kao string
+	//razlika u odnosu na getResponse je da dodaje nas token u http headere
+	//ako dodje do bilo kakve greske vraca null
+	//kao i ostale dvije getResponseWithToken samo sto ova koristi postData iz datoteke
+	public static String getResponseWithTokenPostFile(String urlPath, File filePostData)
+	{	
+		if (token == null) {
+			lastResponseCode = 0;
+			return null;
+		}
+		
+		HttpURLConnection con = null;
+		URL url = null;
+		
+		try {
+			url = new URL(urlPath);
+		} catch(MalformedURLException ex) {
+			lastResponseCode = 0;
+			return null;
+		}
+						
+		try {			
+			con = (HttpURLConnection)url.openConnection();
+	        con.addRequestProperty("Authorization", token);       
+	        con.setInstanceFollowRedirects(false);
+	        con.setUseCaches (false);
+	        con.setDoInput(true);
+		    con.setDoOutput(true);	
+        	con.setRequestMethod("POST"); 
+        	con.setRequestProperty("Content-Type", "application/json"); 
+        	con.setRequestProperty("charset", "utf-8");
+        	con.setRequestProperty("Content-Length", Long.toString(filePostData.length()));        	
+        	
+	        DataOutputStream dataOutputStream = new DataOutputStream(con.getOutputStream());		        		        
+		    DataInputStream dis = new DataInputStream(new FileInputStream(filePostData));
+			byte[] bytes = new byte[300000];			
+			int count = 0;
+			while(true) {
+				count = dis.read(bytes, 0, bytes.length);
+				if (count == -1) break;
+				dataOutputStream.write(bytes, 0, count);				
+			}
+			dis.close();
+			dataOutputStream.close();
+			
+	        lastResponseCode = con.getResponseCode();
+	        
+	        if (lastResponseCode == 200) {
+	            InputStream is = con.getInputStream();            
+	            String response = readOutput(is);
+	            is.close();
+	            con.disconnect();
+	            return response;
+	        } else {
+	        	con.disconnect();
+	        	return null;
+	        }
+		} catch(IOException ex) {			
+			if (!ex.getMessage().contains("connect failed")) {
+				try {
+					lastResponseCode = con.getResponseCode();
+				} catch(IOException ex2) {
+					lastResponseCode = 0;
+				}
+			} else
+				lastResponseCode = 0;
+			
+			if (con != null) con.disconnect();			
+			return null;		
+		}
 	}
 	
 	//ako se aplikacija srusi onda postoji mogucnost da ne ode odmah na Login activity
@@ -416,6 +503,20 @@ public class Connection {
 		return callWebService(urlPath, null);
 	}	
 	
+	public static String callWebServicePostFile(String urlPath, File filePostData)
+	{		
+		String response = getResponseWithTokenPostFile(urlPath, filePostData);
+		
+		if (response == null) {
+			if (googleToken != null) GoogleAuthUtil.invalidateToken(loginActivity, googleToken);
+			googleToken = getGoogleToken();			
+			token = getToken();
+			response = getResponseWithTokenPostFile(urlPath, filePostData);			
+		}
+		
+		return response;
+	}
+	
 	//ako se negdje kasnije dogodila greska - callWebService je vratio null nakon oba 2 pokusaja
 	//sa ovom funkcijom se pokazuje korisniku da je doslo do greske i baca ga se nazad na login
 	public static void errorLogout(final Activity activity) 
@@ -448,5 +549,58 @@ public class Connection {
 		       });		
 		AlertDialog alert = builder.create();
 		alert.show();		
+	}
+	
+	
+	//pretvara file utf8 string i dodaje u POST stream
+	//koristi se za dodavanje slike i zvuka u json objekt
+	//posto se bufferano ucitava zadaje se stream (file)
+	public static void AddFileToJSON(Activity activity, BufferedOutputStream stream, String filePath, String jsonName, String jsonExtension) {		
+		System.out.println("TESTIRANJE " + filePath);
+		
+		try {
+			if (filePath == null) {				
+				stream.write(("\"" + jsonName + "\": \"\",").getBytes(Charset.forName("UTF-8")));
+				stream.write(("\"" + jsonExtension + "\": null").getBytes(Charset.forName("UTF-8")));					
+			} else {
+				//file limit za upload je 10mb
+				File file = new File(filePath);
+				long size = file.length();
+				if (size > 10485760) return; 
+							    
+				byte[] bytes = new byte[300000];
+				int offset = 0;
+				int cnt = 0;
+				BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+				stream.write(("\"" + jsonName + "\": \"").getBytes(Charset.forName("UTF-8")));				
+				while(true) {
+					cnt = bis.read(bytes, offset, bytes.length - offset);
+										
+					if (cnt == -1) {					
+						stream.write(Base64.encode(bytes, Base64.NO_WRAP));
+						stream.flush();
+						break;
+					} else {
+						offset += cnt;
+						if (offset == bytes.length) {
+							stream.write(Base64.encode(bytes, Base64.NO_WRAP));
+							stream.flush();
+							offset = 0;								
+						}						
+					}
+				}
+				bis.close();
+
+				stream.write("\",".getBytes(Charset.forName("UTF-8")));
+				
+				int p = filePath.lastIndexOf('.');
+				
+				if (p == -1)
+					stream.write(("\"" + jsonExtension + "\": null").getBytes(Charset.forName("UTF-8")));
+				else
+					stream.write(("\"" + jsonExtension + "\":\"" + filePath.substring(p + 1) + "\"").getBytes(Charset.forName("UTF-8")));
+			}
+		} catch (IOException ex) {			
+		}
 	}
 }

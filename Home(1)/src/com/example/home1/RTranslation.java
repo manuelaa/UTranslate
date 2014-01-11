@@ -1,20 +1,32 @@
 package com.example.home1;
 
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +36,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 public class RTranslation extends Activity {	
@@ -60,6 +73,9 @@ public class RTranslation extends Activity {
 	private ImageButton toLanguageButton;
 	private static final int ACTIVITY_TO_LANGUAGE = 500;
 	
+	private Button postButton;
+	private EditText editText;
+	
 	//stvara file za sliku
 	private File createImageFile() throws IOException {
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
@@ -69,7 +85,8 @@ public class RTranslation extends Activity {
 	    //File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 	    File image = new File(storageDir, imageFileName + ".jpg");
 
-	    photoPathNew = "file:" + image.getAbsolutePath();
+	    //photoPathNew = "file:" + image.getAbsolutePath();
+	    photoPathNew = image.getAbsolutePath();	    
 	    return image;
 	}
 	
@@ -131,8 +148,6 @@ public class RTranslation extends Activity {
         audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + audioFileName + ".3gp";        
         audioRecorder.setOutputFile(audioPath);
         
-        System.out.println(audioPath);
-        
         try {        	
             audioRecorder.prepare();
             audioRecorder.start();
@@ -161,6 +176,15 @@ public class RTranslation extends Activity {
         addAudioButton.setImageResource(R.drawable.sound_1);
     }
 	
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(getBaseContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+    
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -184,8 +208,8 @@ public class RTranslation extends Activity {
 	    	if (resultCode == RESULT_OK) {
 	    		//dohvati lokaciju slike
 	    		
-	    		Uri uri = data.getData();	    		
-	    		photoPath = uri.getPath();	    			    		
+	    		Uri uri = data.getData();
+	    		photoPath = getRealPathFromURI(uri);    		
 	    		addPictureButton.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));	
 	    	} else if (resultCode == RESULT_CANCELED) {
 	    		
@@ -197,7 +221,7 @@ public class RTranslation extends Activity {
 	    		//dohvati lokaciju zvuka
 	    		
 	    		Uri uri = data.getData();	    		
-	    		audioPath = uri.getPath();	    		
+	    		audioPath = getRealPathFromURI(uri);	    		
 	    		addAudioButton.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));
 	    	} else if (resultCode == RESULT_CANCELED) {
 	    		
@@ -227,7 +251,6 @@ public class RTranslation extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
@@ -336,6 +359,55 @@ public class RTranslation extends Activity {
 				startActivityForResult(i, ACTIVITY_TO_LANGUAGE);
 			}
 		});
+		
+		//gumb za postanje		
+		postButton = (Button) findViewById(R.id.bPost);
+		editText = (EditText) findViewById(R.id.editText1);
+		postButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//TODO upali ovu provjeri i izbrisi ono ispod
+				//if (checkedLanguagesFrom.size() == 0 || checkedLanguagesTo.size() == 0 || editText.getText().toString() == "")
+				//	return;
+				
+				checkedLanguagesFrom.add(languagesFrom.get(0));
+				checkedLanguagesTo.add(languagesFrom.get(1));
+				checkedLanguagesTo.add(languagesFrom.get(2));
+				editText.setText("bok");
+				
+				//prvo treba naci da li ima slicnih requestova
+				Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+				builder.appendPath("Requests");
+				builder.appendPath("FindSimilar");
+				JSONObject obj;				
+				
+				try {
+					obj = new JSONObject();
+					obj.put("text", editText.getText());
+					obj.put("languageAsk", Integer.parseInt(checkedLanguagesFrom.get(0).id));					
+					
+					ArrayList<Integer> languageTold = new ArrayList<Integer>();
+					for(int i = 0; i < checkedLanguagesTo.size(); i++)
+						languageTold.add(Integer.parseInt(checkedLanguagesTo.get(i).id));									
+					obj.put("languageTold", new JSONArray(languageTold));
+				} catch (JSONException e) {
+					return;
+				}
+								
+				WebServiceTask webTask = new WebServiceTask(RTranslation.this, builder.build().toString(), obj.toString(), "Searching", "Searching for similar requests, please wait...") {
+					@Override
+					protected void onPostExecute(String result) {
+						super.onPostExecute(result);
+						
+						if (result != null && json == null)
+							dodajRequest(null);
+						else if (result != null && json != null)
+							prikaziSlicne(json);							
+					}				
+				};		
+				webTask.execute((Void)null);	
+			}
+		});
 	}
 	
 	//sagradi listu jezika
@@ -354,7 +426,85 @@ public class RTranslation extends Activity {
 				languagesFrom.add(new Lang(lang[0], lang[1], this));				
 			}
 		}
-		resLangs.recycle();
+		resLangs.recycle();	
+	}
 	
+	private void prikaziSlicne(JSONObject json) {
+		
+		
+	}
+
+	//dodaje novi request i salje se similarId (null ako nema slicnog)
+	private void dodajRequest(Integer similarId) {
+		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+		builder.appendPath("Requests");
+		builder.appendPath("UpdateRequest");
+		JSONObject obj;				
+		
+		try {
+			obj = new JSONObject();
+			obj.put("languageAsk", Integer.parseInt(checkedLanguagesFrom.get(0).id));
+			obj.put("text", editText.getText());
+						
+			ArrayList<Integer> languageTold = new ArrayList<Integer>();
+			for(int i = 0; i < checkedLanguagesTo.size(); i++)
+				languageTold.add(Integer.parseInt(checkedLanguagesTo.get(i).id));												
+			obj.put("languageTold", new JSONArray(languageTold));
+						
+			if (similarId == null) 
+				obj.put("similarId", JSONObject.NULL);		
+			else
+				obj.put("similarId", similarId);
+		} catch (JSONException e) {			 
+			return;
+		}
+		
+		WebServiceTask webTask = new WebServiceTask(RTranslation.this, builder.build().toString(), obj.toString(), "Uploading", "Please wait...") {
+			@Override
+			protected String doInBackground(Void... params) {
+				Connection.ProvjeriInicijalizaciju(activity);		
+							
+				BufferedOutputStream stream = null;
+				String ret = null;
+				
+				try {
+				    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);				    
+				    File tmpJson = File.createTempFile("request", ".dat", storageDir);					    
+				    stream = new BufferedOutputStream(new FileOutputStream(tmpJson));
+					
+				    //posto uploadam velike fajlove moram to raditi sa bufferima
+				    //pa cu onda prvo poslat JSON pa fajlove nakon toga
+				    //pa moram djelomicno rucno graditi JSON i upisivati u stream
+				    //izbaci } a dodaj , na kraju jsona
+					byte[] data = (postData.substring(0, postData.length() - 1) + ",").getBytes(Charset.forName("UTF-8"));					
+				    stream.write(data);
+					stream.flush();
+					Connection.AddFileToJSON(RTranslation.this, stream, photoPath, "picture", "pictureExtension");
+					stream.write(',');					
+					Connection.AddFileToJSON(RTranslation.this, stream, audioPath, "audio", "audioExtension");
+					stream.write('}');
+					stream.write('\0');
+					stream.close();
+					
+					ret = Connection.callWebServicePostFile(url, tmpJson);					
+				    tmpJson.delete();
+				    return ret;
+				} catch (IOException e) {							
+					return null;
+				}
+			}
+			
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				
+				if (result != null) {
+					Intent i = new Intent(RTranslation.this, Homepage.class);				
+	        		startActivity(i);
+	        		finish();
+				}
+			}				
+		};		
+		webTask.execute((Void)null);		
 	}
 }
