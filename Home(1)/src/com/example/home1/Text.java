@@ -2,40 +2,20 @@ package com.example.home1;
 
 public class Text {
 	public String username;
-	public int idSlike;
 	public String text;
 	public int idLang1;
-	public int idLang2; //= new int[5];	//ne bi trebalo više od 5 valjda
+	public int idLang2;
+	public float rating;
 	
+	//url path do zvuka (ili null ako nema na ovom odgovoru)
+	public String audioURLPath = null;
+	//path do skinutog zvuka na disku ili null ako nisam skinuo
+	public String audioFilePath = null;
 	
+	//slike
+	public int resourceIdLang1;
+	public int resourceIdLang2;
+	//TODO display picture
 	
-	public Text(String username, int idSlike, String text, int idLang1, int idLang2) {		
-		super();
-		this.username = username;
-		this.idSlike=idSlike;
-		this.text=text;
-		this.idLang1 = idLang1;
-		this.idLang2 = idLang2;
-	}
-	
-	public String getUsername(){
-		return username;
-	}
-	
-	public int getId(){
-		return idSlike;
-	}
-	
-	public String getText(){
-		return text;
-	}
-	
-	public int getIdLang1(){
-		return idLang1;
-	} 
-	
-	public int getIdLang2(){
-		return idLang2;
-	}
-	
+	public Text() {}
 }

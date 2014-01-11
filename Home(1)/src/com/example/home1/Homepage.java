@@ -64,7 +64,11 @@ public class Homepage extends Activity implements OnClickListener {
 					System.out.println("TESTIRANJE NULL");
 			}				
 		};		
-		webTask.execute((Void)null);		
+		webTask.execute((Void)null);
+		
+		/* TODO TESTING */
+		/*Intent i = new Intent(this, Tr.class);
+		startActivity(i);*/
 	}
 
 	@Override

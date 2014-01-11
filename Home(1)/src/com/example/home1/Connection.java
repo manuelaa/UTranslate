@@ -153,7 +153,7 @@ public class Connection {
 				loginButton.setEnabled(true);
 				loginProgress.dismiss();
 				
-				if (token != null && token != "") {
+				if (token != null && !token.isEmpty()) {
 					//login je uspio
 					
 					//sejvaj postavke da se moze obnoviti connection kad se app ponovno pokrene
@@ -228,6 +228,7 @@ public class Connection {
 		builder.appendQueryParameter("googleToken", googleToken);		
 						
 		try {
+			System.out.println("TESTIRANJE zovem:" + builder.build().toString());
 			String response = getResponse(builder.build().toString());
 			if (response == null) return null;
 

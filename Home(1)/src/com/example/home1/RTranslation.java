@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.media.MediaRecorder;
@@ -408,10 +409,12 @@ public class RTranslation extends Activity {
 					protected void onPostExecute(String result) {
 						super.onPostExecute(result);
 						
-						if (result != null && json == null)
-							dodajRequest(null);
-						else if (result != null && json != null)
-							prikaziSlicne((JSONArray)json);							
+						if (result != null) {
+							if (((JSONArray)json).length() == 0)
+								dodajRequest(null);
+							else
+								prikaziSlicne((JSONArray)json);	
+						}
 					}				
 				};		
 				webTask.execute((Void)null);	
