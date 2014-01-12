@@ -29,65 +29,24 @@
 
     </LinearLayout>
 
-    <TabHost
-        android:id="@+id/tabhost"
-        android:layout_width="match_parent"
-        android:layout_height="162dp" >
-
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="64dp" >
-        </TabWidget>
-
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="519dp" >
-
-            <LinearLayout
-                android:id="@+id/tab1"
-                android:layout_width="match_parent"
-                android:layout_height="522dp"
-                android:layout_gravity="bottom" >
-
-                <ListView
-                    android:id="@+id/lvMy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
-                </ListView>
-                
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-                
-                <ListView
-                    android:id="@+id/lvOthers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
-                </ListView>
-                
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-                
-                <ListView
-                    android:id="@+id/lvTranslated"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
-                </ListView>
-                
-            </LinearLayout>
-        </FrameLayout>
-    </TabHost>
+   <TabHost 
+    	android:id="@android:id/tabhost"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent">
+	    <LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent">
+	        <TabWidget
+	            android:id="@android:id/tabs"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:background="@color/button_login_text" />
+	        <FrameLayout
+	            android:id="@android:id/tabcontent"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"/>
+	    </LinearLayout>
+	</TabHost>
 
 </LinearLayout>
