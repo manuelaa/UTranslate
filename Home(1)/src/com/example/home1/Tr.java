@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -532,6 +533,31 @@ public class Tr extends Activity {
 			//vrijeme
 			TextView timePosted = (TextView)itemView.findViewById(R.id.ddmmgggg);
 			timePosted.setText(current.timePosted);
+			/*
+			Button rateBtn = (Button) findViewById(R.id.bR1);
+			rateBtn.setOnClickListener(new View.OnClickListener() {
+			     public void onClick(View v) {
+			        final Dialog rankDialog = new Dialog(Tr.this, R.style.FullHeightDialog);
+			        rankDialog.setContentView(R.layout.rank_dialog);
+			        rankDialog.setCancelable(true);
+			        RatingBar ratingBar = (RatingBar)rankDialog.findViewById(R.id.rbRate);
+			        //ratingBar.setRating(userRankValue);
+			        
+			 
+			        Button updateButton = (Button) rankDialog.findViewById(R.id.bRate);
+			        updateButton.setOnClickListener(new View.OnClickListener() {
+			            @Override
+			            public void onClick(View v) {
+			                rankDialog.dismiss();
+			            }
+			        });
+			        //now that the dialog is set up, it's time to show it    
+			        rankDialog.show();                
+			    }
+			});
+			
+			*/
+			
 			
 			//audio button na odgovoru
 			final ImageView audioButton = (ImageView)itemView.findViewById(R.id.imageView1);
