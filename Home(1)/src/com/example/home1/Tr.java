@@ -278,9 +278,7 @@ public class Tr extends Activity {
 						newAnswer.text = obj.getString("Text");
 						newAnswer.timePosted = obj.getString("timePosted");
 						newAnswer.rating = (float)obj.getDouble("rate");
-						
-						//rating treba zaokruziti na .5 decimalu
-						newAnswer.rating = Math.round(newAnswer.rating * 2) / 2.0f;
+						newAnswer.userRating = (float)obj.getDouble("userRating");
 						
 						if (obj.get("audioExtension") != JSONObject.NULL)
 							newAnswer.audio = new DownloadMultimedia(obj.getString("audio"));
@@ -318,12 +316,15 @@ public class Tr extends Activity {
 						
 						//provjeri da li u listi vec imam answer sa ovim id-om
 						//onda se radilo o updateu pa ga izbrisi
+						/* <nema updateanja>
+						 * 
 						for(int i = 0; i < answers.size(); i++) {
 							if (answers.get(i).answerId == newAnswer.answerId) {
 								answers.remove(i);
 								break;
 							}
 						}
+						*/
 						
 						//dodaj novi odgovor na pocetak liste
 						answers.add(0, newAnswer);
@@ -435,9 +436,7 @@ public class Tr extends Activity {
 						newAnswer.text = obj.getString("Text");
 						newAnswer.timePosted = obj.getString("timePosted");
 						newAnswer.rating = (float)obj.getDouble("rate");
-						
-						//rating treba zaokruziti na .5 decimalu
-						newAnswer.rating = Math.round(newAnswer.rating * 2) / 2.0f;
+						newAnswer.userRating = (float)obj.getDouble("userRating");
 						
 						if (obj.get("audioExtension") != JSONObject.NULL)
 							newAnswer.audio = new DownloadMultimedia(obj.getString("audio"));
@@ -494,7 +493,7 @@ public class Tr extends Activity {
 	private void populateListView() {
 		adapter = new ListAdapter();
 		list = (ListView) findViewById(R.id.listView1);
-		list.setAdapter(adapter);		
+		list.setAdapter(adapter);
  	}
 	
 	

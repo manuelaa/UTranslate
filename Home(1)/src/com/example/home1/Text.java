@@ -8,7 +8,7 @@ public class Text {
 	public long answerId;
 	
 	public String text;
-	public float rating;
+	public float rating; //ukupni rating
 	public String timePosted;
 	
 	//uploadani zvuk
@@ -16,6 +16,10 @@ public class Text {
 	
 	//user
 	public User user;
+	
+	//koji je rating dao trenutno logirani korisnik za ovaj answer
+	//-1 ako nije rateao
+	public float userRating;
 	
 	public Text() {}
 }

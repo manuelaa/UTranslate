@@ -501,7 +501,7 @@ public class RTranslation extends Activity {
 				String ret = null;
 				
 				try {
-				    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);				    
+					File storageDir = new File(CacheManager.EXTERNAL_STORAGE_PATH);					    
 				    tmpJson = File.createTempFile("request", ".dat", storageDir);					    
 				    stream = new BufferedOutputStream(new FileOutputStream(tmpJson));
 					

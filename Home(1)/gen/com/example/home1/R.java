@@ -262,25 +262,28 @@ containing a value of this type.
         public static final int new_m_1=0x7f020038;
         public static final int new_m_11=0x7f020039;
         public static final int new_m_12=0x7f02003a;
-        public static final int request_translation=0x7f02003b;
-        public static final int request_translation_3=0x7f02003c;
-        public static final int request_translation_c=0x7f02003d;
-        public static final int request_translation_land1=0x7f02003e;
-        public static final int sett=0x7f02003f;
-        public static final int sett_1=0x7f020040;
-        public static final int sett_2=0x7f020041;
-        public static final int sound_1=0x7f020042;
-        public static final int sound_2=0x7f020043;
-        public static final int star=0x7f020044;
-        public static final int star_e=0x7f020045;
-        public static final int star_small=0x7f020046;
-        public static final int translation_1=0x7f020047;
-        public static final int trokut=0x7f020048;
-        public static final int trokut_small=0x7f020049;
-        public static final int upitnik=0x7f02004a;
-        public static final int upitnik1=0x7f02004b;
-        public static final int upitnik_small=0x7f02004c;
-        public static final int vise_jezika=0x7f02004d;
+        public static final int rating_bar_full_empty=0x7f02003b;
+        public static final int rating_bar_full_filled=0x7f02003c;
+        public static final int request_translation=0x7f02003d;
+        public static final int request_translation_3=0x7f02003e;
+        public static final int request_translation_c=0x7f02003f;
+        public static final int request_translation_land1=0x7f020040;
+        public static final int sett=0x7f020041;
+        public static final int sett_1=0x7f020042;
+        public static final int sett_2=0x7f020043;
+        public static final int sound_1=0x7f020044;
+        public static final int sound_2=0x7f020045;
+        public static final int star=0x7f020046;
+        public static final int star_e=0x7f020047;
+        public static final int star_ratingbar_full=0x7f020048;
+        public static final int star_small=0x7f020049;
+        public static final int translation_1=0x7f02004a;
+        public static final int trokut=0x7f02004b;
+        public static final int trokut_small=0x7f02004c;
+        public static final int upitnik=0x7f02004d;
+        public static final int upitnik1=0x7f02004e;
+        public static final int upitnik_small=0x7f02004f;
+        public static final int vise_jezika=0x7f020050;
     }
     public static final class id {
         public static final int CheckBox=0x7f050017;
@@ -301,26 +304,26 @@ containing a value of this type.
         public static final int editText1=0x7f05000c;
         public static final int group=0x7f050026;
         public static final int hybrid=0x7f050004;
-        public static final int ibCam=0x7f050034;
-        public static final int ibMic=0x7f050035;
+        public static final int ibCam=0x7f050038;
+        public static final int ibMic=0x7f05003c;
         public static final int ibNewMes=0x7f05002a;
-        public static final int ibSound=0x7f050033;
+        public static final int ibSound=0x7f050037;
         public static final int ibUpitnik=0x7f05000a;
         public static final int ibUpitnik2=0x7f050008;
         public static final int imBack=0x7f050014;
         public static final int imageButton1=0x7f05000e;
         public static final int imageButton2=0x7f05000f;
         public static final int imageView1=0x7f050009;
-        public static final int imageView4=0x7f050037;
-        public static final int imageView5=0x7f050039;
-        public static final int imageView6=0x7f050038;
+        public static final int imageView4=0x7f050034;
+        public static final int imageView5=0x7f050036;
+        public static final int imageView6=0x7f050035;
         public static final int item_icon=0x7f050015;
         public static final int item_txtLang=0x7f050016;
         public static final int item_txtSimilar=0x7f050019;
         public static final int ivSimilarFlag=0x7f050018;
         public static final int label=0x7f05001f;
         public static final int linearLayout1=0x7f050025;
-        public static final int listView1=0x7f05003b;
+        public static final int listView1=0x7f05003a;
         public static final int listViewT=0x7f050029;
         public static final int logo=0x7f05001e;
         public static final int lvMy=0x7f05002d;
@@ -339,9 +342,9 @@ containing a value of this type.
         public static final int tableRow1=0x7f050006;
         public static final int tableRow2=0x7f05000b;
         public static final int tableRow3=0x7f05000d;
-        public static final int tableRow4=0x7f05003a;
-        public static final int tableRow5=0x7f05003c;
-        public static final int tableRow6=0x7f050036;
+        public static final int tableRow4=0x7f050039;
+        public static final int tableRow5=0x7f05003b;
+        public static final int tableRow6=0x7f050033;
         public static final int terrain=0x7f050003;
         public static final int tv_show=0x7f050032;
         public static final int userPhoto=0x7f050011;
@@ -361,9 +364,7 @@ containing a value of this type.
         public static final int main=0x7f030008;
         public static final int similar_requests=0x7f030009;
         public static final int tabs=0x7f03000a;
-        public static final int translation_1=0x7f03000b;
-        public static final int translation_2=0x7f03000c;
-        public static final int translation_3=0x7f03000d;
+        public static final int translation_3=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
@@ -498,8 +499,7 @@ containing a value of this type.
         /**  ActionBar tabs text styles 
          */
         public static final int MyActionBarTabText=0x7f0a0002;
-        public static final int RatingBar=0x7f0a0003;
-        public static final int RatingBarSmall=0x7f0a0004;
+        public static final int starRatingBar=0x7f0a0003;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.
