@@ -19,7 +19,7 @@ public class Text {
 	
 	//koji je rating dao trenutno logirani korisnik za ovaj answer
 	//-1 ako nije rateao
-	public float userRating;
+	public int userRating;
 	
 	public Text() {}
 }

@@ -45,26 +45,22 @@ public class Homepage extends TabActivity implements OnClickListener {
         tab_2.setIndicator(Tab2, getResources().getDrawable(R.drawable.ic_launcher));
         Intent tab2Intent = new Intent(this, Tab2.class);
         tab_2.setContent(tab2Intent);
-       
-        // Tab3 Tab
-        //TabSpec tab_3 = tabHost.newTabSpec(Tab2);
-        //tab_2.setIndicator(Tab3, getResources().getDrawable(R.drawable.ic_launcher));
-        //Intent tab3Intent = new Intent(this, Tab3.class);
-        //tab_2.setContent(tab2Intent);
         
-     // Profile Tab
+        // Tab3 Tab
         TabSpec tab_3 = tabHost.newTabSpec(Tab3);
         tab_3.setIndicator(Tab3, getResources().getDrawable(R.drawable.ic_launcher));
         Intent profileIntent = new Intent(this, Tab3.class);
         tab_3.setContent(profileIntent);
-        
-        
+                
         // Adding all TabSpec to TabHost
         tabHost.addTab(tab_1); // Adding tab1 tab
         tabHost.addTab(tab_2); // Adding tab2 tab
-        //tabHost.addTab(tab_3); // Adding tab3 tab
         tabHost.addTab(tab_3);
 		
+		//stvori direktorij za external cache
+		if (CacheManager.EXTERNAL_STORAGE_PATH == null)
+			CacheManager.createExternalDataDir();
+        
 		//TODO TESTIRANJE POZIVA WEB SERVISA
 		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
 		//builder.appendPath("Login");

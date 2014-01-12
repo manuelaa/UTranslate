@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -278,7 +279,7 @@ public class Tr extends Activity {
 						newAnswer.text = obj.getString("Text");
 						newAnswer.timePosted = obj.getString("timePosted");
 						newAnswer.rating = (float)obj.getDouble("rate");
-						newAnswer.userRating = (float)obj.getDouble("userRating");
+						newAnswer.userRating = obj.getInt("userRating");
 						
 						if (obj.get("audioExtension") != JSONObject.NULL)
 							newAnswer.audio = new DownloadMultimedia(obj.getString("audio"));
@@ -414,7 +415,7 @@ public class Tr extends Activity {
 		} catch (JSONException e) {			
 			return;
 		}
-
+		
 		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading answers", "Please wait...") {
 			@Override
 			protected String doInBackground(Void... params) {
@@ -435,8 +436,8 @@ public class Tr extends Activity {
 						newAnswer.answerId = Integer.parseInt(obj.getString("answerId"));
 						newAnswer.text = obj.getString("Text");
 						newAnswer.timePosted = obj.getString("timePosted");
-						newAnswer.rating = (float)obj.getDouble("rate");
-						newAnswer.userRating = (float)obj.getDouble("userRating");
+						newAnswer.rating = (float)obj.getDouble("rate");						
+						newAnswer.userRating = obj.getInt("userRating");
 						
 						if (obj.get("audioExtension") != JSONObject.NULL)
 							newAnswer.audio = new DownloadMultimedia(obj.getString("audio"));
@@ -496,6 +497,37 @@ public class Tr extends Activity {
 		list.setAdapter(adapter);
  	}
 	
+	//ocjenjuje zadani odgovor
+	private void rateAnswer(final Text answer, final int rating) {
+		if (answer == null) return;
+		
+		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+		builder.appendPath("Ratings");
+		builder.appendPath("RateAnswer");
+		JSONObject obj;				
+		
+		try {
+			obj = new JSONObject();
+			obj.put("answerId", answer.answerId);
+			obj.put("rate", rating);			
+		} catch (JSONException e) {			 
+			return;
+		}
+		
+		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Rating", "Please wait...") {						
+			@Override
+			protected void onPostExecute(String result) {				
+				super.onPostExecute(result);				
+				
+				if (result != null) {
+					answer.rating = rating;
+					adapter.notifyDataSetChanged();
+				}
+			}
+		};		
+		webTask.execute((Void)null);		
+	}
+	
 	
 	private class ListAdapter extends ArrayAdapter<Text> {
 		public ListAdapter() {
@@ -551,7 +583,21 @@ public class Tr extends Activity {
 				}
 			});
 			
-			//TODO RATE GUMB
+			//gumb za rateanje odgovora
+			final Button rateButton = (Button)itemView.findViewById(R.id.button1);
+			
+			//da li je korisnik vec rateo
+			if (current.userRating != -1)
+				rateButton.setBackgroundColor(Color.WHITE);
+			else
+				rateButton.setBackgroundColor(Color.rgb(194, 167, 122));
+			
+			rateButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					rateAnswer(current, 3);					
+				}
+			});
 			
 			return itemView;
 		}
