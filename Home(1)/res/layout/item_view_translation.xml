@@ -87,6 +87,7 @@
                 <RatingBar
 			        android:id="@+id/ratingBar1"
 			        style="@style/starRatingBar"
+			        android:isIndicator="true"
 			        android:layout_width="wrap_content"
 			        android:layout_height="30dp"
 			        android:rating="0.0"

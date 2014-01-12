@@ -3,8 +3,13 @@ package com.example.home1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -17,70 +22,81 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Tab3 extends Activity {
-	private List<TabText> lista=new ArrayList<TabText>(); 
+	public static ArrayList<Request> lista = null; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tab1);
+		setContentView(R.layout.tab3);	
+		populateList();
+	}
 	
-		populateList(); 
-		populateListView();
+	@Override
+	public void onResume() {
+	    super.onResume(); 	
+	    populateList();
 	}
 
 	private void populateList() {
-		// TODO Auto-generated method stub
-		lista.add(new TabText("boook", 0, 0));
-		lista.add(new TabText("Ciao", 0,0));
-		lista.add(new TabText("Bok bok", 0,0));
-		lista.add(new TabText("BOK", 0,0));
-		lista.add(new TabText("Boooook", 0,0));
+		if (lista != null) return;
 		
+		lista = new ArrayList<Request>();
+		
+		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+		builder.appendPath("RequestLanguages");
+		builder.appendPath("RequestTranslated");						
+		
+		WebServiceTask webTask = new WebServiceTask(Tab3.this, builder.build().toString(), "", "Loading", "Please wait...") {
+			@Override
+			protected String doInBackground(Void... params) {
+				Connection.ProvjeriInicijalizaciju(activity);		
+				String result = Connection.callWebService(url, postData);	
+				
+				if (result != null) {
+					try {						
+						JSONArray jsonArray = new JSONArray(result);
+						
+						for(int i = 0; i < jsonArray.length(); i++) {
+							JSONObject obj = jsonArray.getJSONObject(i);
+							Request request = new Request(
+								Tab3.this,
+								Long.parseLong(obj.getString("userId")),
+								Long.parseLong(obj.getString("requestId")),
+								obj.getString("text"),
+								((obj.get("audioExtension") == JSONObject.NULL) ? null : obj.getString("audio")),
+								((obj.get("pictureExtension") == JSONObject.NULL) ? null : obj.getString("picture")),							
+								obj.getInt("languageAsk"),
+								obj.getInt("languageTold"),
+								obj.getString("timePosted"),
+								false						
+							);
+							
+							lista.add(request);
+						}
+					} catch(JSONException e) {
+					}
+				}
+				
+				return result;
+			}
+						
+			@Override
+			protected void onPostExecute(String result) {
+				if (dialog != null) dialog.dismiss();
+						
+				if (result != null)
+					populateListView();
+				else					
+					Connection.errorLogout(activity);
+			}
+		};		
+		webTask.execute((Void)null);
 	}
 
 	private void populateListView() {
-		// TODO Auto-generated method stub
-		ArrayAdapter<TabText> adapter = new MyListAdapter();
-		ListView list=(ListView) findViewById(R.id.lvMy);
+		ArrayAdapter<Request> adapter = new RequestListAdapter(this, R.layout.item_view_tab1, lista);
+		ListView list = (ListView) findViewById(R.id.lvTranslated);
 		list.setAdapter(adapter);
- 	}
-	
-	
-	private class MyListAdapter extends ArrayAdapter<TabText> {
-
-		public MyListAdapter() {
-			super(Tab3.this, R.layout.item_view_tab1, lista); //base class called
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			//Make sure we have a view to work with (may have been given null)
-			View itemView=convertView;
-			if(itemView==null)
-				itemView=getLayoutInflater().inflate(R.layout.item_view_tab1, parent, false);
-			
-			// find the car to work with
-			TabText currentlista=lista.get(position);
-			
-			
-			ImageView trokut = (ImageView)itemView.findViewById(R.id.item_ivTrokut);
-			trokut.setImageResource(R.drawable.trokut_small);
-			
-			ImageView zastava1 = (ImageView)itemView.findViewById(R.id.item_ivLangA);
-			zastava1.setImageResource(R.drawable.lang_5);
-			
-			ImageView zastava2 = (ImageView)itemView.findViewById(R.id.item_ivLangB);
-			zastava2.setImageResource(R.drawable.lang_6);
-
-		
-			//make
-			TextView makeText = (TextView) itemView.findViewById(R.id.item_tvText);
-			makeText.setText(currentlista.getText());
-
-		
-			return itemView;
-		}
-		
-		}
-	}
+ 	}	
+}
 	

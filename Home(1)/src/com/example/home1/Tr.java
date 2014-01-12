@@ -155,12 +155,7 @@ public class Tr extends Activity {
 		//stvori direktorij za external cache
 		if (CacheManager.EXTERNAL_STORAGE_PATH == null)
 			CacheManager.createExternalDataDir();		
-		
-		/* TODO TESTING */
-		//(Context context, long userId, long requestId, String text, String audioURLPath, String pictureURLPath, int idLang1, int idLang2, String timePosted, boolean notification) {
-		request = new Request(this, 1, 1, "tekst", null, null, 2, 4, "1.1.2014.", false);
-		//request = new Request(this, 1, 63, "tekst", "http://nihao.fer.hr/UTranslate/data/request_audio/request_63.3gp", "http://nihao.fer.hr/UTranslate/data/request_pictures/request_63.jpg", 1, 1, "1.1.2014.", false);
-		
+				
 		setContentView(R.layout.translation_3);
 		
 		//slozi dijalog za odabir izmedju snimanja/zvuka sa diska
@@ -515,14 +510,19 @@ public class Tr extends Activity {
 			return;
 		}
 		
-		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Rating", "Please wait...") {						
+		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Rating answer", "Please wait...") {						
 			@Override
 			protected void onPostExecute(String result) {				
 				super.onPostExecute(result);				
 				
 				if (result != null) {
-					answer.rating = rating;
-					adapter.notifyDataSetChanged();
+					answer.userRating = rating;
+					
+					try {
+						answer.rating = (float)((JSONObject)json).getDouble("rating");
+						adapter.notifyDataSetChanged();
+					} catch (JSONException e) {
+					}					
 				}
 			}
 		};		
@@ -565,57 +565,6 @@ public class Tr extends Activity {
 			//vrijeme
 			TextView timePosted = (TextView)itemView.findViewById(R.id.ddmmgggg);
 			timePosted.setText(current.timePosted);
-			/*
-			Button rateBtn = (Button) findViewById(R.id.bR1);
-			rateBtn.setOnClickListener(new View.OnClickListener() {
-			     public void onClick(View v) {
-			        final Dialog rankDialog = new Dialog(Tr.this, R.style.FullHeightDialog);
-			        rankDialog.setContentView(R.layout.rank_dialog);
-			        rankDialog.setCancelable(true);
-			        RatingBar ratingBar = (RatingBar)rankDialog.findViewById(R.id.rbRate);
-			        //ratingBar.setRating(userRankValue);
-			        
-			 
-			        Button updateButton = (Button) rankDialog.findViewById(R.id.bRate);
-			        updateButton.setOnClickListener(new View.OnClickListener() {
-			            @Override
-			            public void onClick(View v) {
-			                rankDialog.dismiss();
-			            }
-			        });
-			        //now that the dialog is set up, it's time to show it    
-			        rankDialog.show();                
-			    }
-			});
-			
-			*/
-			
-			
-			/*
-			Button rateBtn = (Button) findViewById(R.id.bR1);
-			rateBtn.setOnClickListener(new View.OnClickListener() {
-			     public void onClick(View v) {
-			        final Dialog rankDialog = new Dialog(Tr.this, R.style.FullHeightDialog);
-			        rankDialog.setContentView(R.layout.rank_dialog);
-			        rankDialog.setCancelable(true);
-			        RatingBar ratingBar = (RatingBar)rankDialog.findViewById(R.id.rbRate);
-			        //ratingBar.setRating(userRankValue);
-			        
-			 
-			        Button updateButton = (Button) rankDialog.findViewById(R.id.bRate);
-			        updateButton.setOnClickListener(new View.OnClickListener() {
-			            @Override
-			            public void onClick(View v) {
-			                rankDialog.dismiss();
-			            }
-			        });
-			        //now that the dialog is set up, it's time to show it    
-			        rankDialog.show();                
-			    }
-			});
-			
-			*/
-			
 			
 			//audio button na odgovoru
 			final ImageView audioButton = (ImageView)itemView.findViewById(R.id.imageView1);
@@ -644,10 +593,35 @@ public class Tr extends Activity {
 			else
 				rateButton.setBackgroundColor(Color.rgb(194, 167, 122));
 			
+			//kad klikne gumb rate pozovi dijalog
 			rateButton.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View arg0) {
-					rateAnswer(current, 3);					
+				public void onClick(View arg0) {					
+					//final Dialog rankDialog = new Dialog(Tr.this, R.style.FullHeightDialog);
+										
+					final Dialog rankDialog = new Dialog(Tr.this);
+					rankDialog.setTitle("Rate answer");
+					rankDialog.setContentView(R.layout.rank_dialog);
+				    rankDialog.setCancelable(true);
+				    final RatingBar ratingBar = (RatingBar)rankDialog.findViewById(R.id.rbRate);
+				     
+				    //napisi prethodni rating ako postoji
+				    if (current.userRating != -1) 
+				    	ratingBar.setRating((float)current.userRating);
+				    else
+				    	ratingBar.setRating(0);				 
+				    	
+			        Button updateButton = (Button)rankDialog.findViewById(R.id.bRate);
+			        updateButton.setOnClickListener(new View.OnClickListener() {
+			            @Override
+			            public void onClick(View v) {
+			            	//updateaj rating
+			            	rateAnswer(current, (int)ratingBar.getRating());
+			            	rankDialog.dismiss();
+			            }
+			        });
+			        			        
+			        rankDialog.show();      
 				}
 			});
 			

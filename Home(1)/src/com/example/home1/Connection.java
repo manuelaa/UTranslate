@@ -143,8 +143,6 @@ public class Connection {
 			protected Void doInBackground(Void... params) {
 				googleToken = getGoogleToken();					
 				token = getToken();
-				System.out.println("TESTIRANJE googleToken: " + googleToken);
-				System.out.println("TESTIRANJE token: " + token);
 				return (Void)null;	
 			}
 			
@@ -228,7 +226,6 @@ public class Connection {
 		builder.appendQueryParameter("googleToken", googleToken);		
 						
 		try {
-			System.out.println("TESTIRANJE zovem:" + builder.build().toString());
 			String response = getResponse(builder.build().toString());
 			if (response == null) return null;
 

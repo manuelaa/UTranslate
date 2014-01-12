@@ -16,9 +16,9 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class Homepage extends TabActivity implements OnClickListener {
-	private static final String Tab1 = "My";
-    private static final String Tab2 = "Others";
-    private static final String Tab3 = "Translated";
+	private static final String TabName1 = "My";
+    private static final String TabName2 = "Others";
+    private static final String TabName3 = "Translated";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,56 +33,33 @@ public class Homepage extends TabActivity implements OnClickListener {
 		TabHost tabHost = getTabHost();
         
         // Tab1 Tab
-        TabSpec tab_1 = tabHost.newTabSpec(Tab1);
+        TabSpec tab_1 = tabHost.newTabSpec(TabName1);
         // Tab Icon
-        tab_1.setIndicator(Tab1, getResources().getDrawable(R.drawable.ic_launcher));
+        tab_1.setIndicator(TabName1, getResources().getDrawable(R.drawable.ic_launcher));
         Intent tab1Intent = new Intent(this, Tab1.class);
         // Tab Content
         tab_1.setContent(tab1Intent);
          
         // Tab2 Tab
-        TabSpec tab_2 = tabHost.newTabSpec(Tab2);
-        tab_2.setIndicator(Tab2, getResources().getDrawable(R.drawable.ic_launcher));
+        TabSpec tab_2 = tabHost.newTabSpec(TabName2);
+        tab_2.setIndicator(TabName2, getResources().getDrawable(R.drawable.ic_launcher));
         Intent tab2Intent = new Intent(this, Tab2.class);
         tab_2.setContent(tab2Intent);
         
         // Tab3 Tab
-        TabSpec tab_3 = tabHost.newTabSpec(Tab3);
-        tab_3.setIndicator(Tab3, getResources().getDrawable(R.drawable.ic_launcher));
+        TabSpec tab_3 = tabHost.newTabSpec(TabName3);
+        tab_3.setIndicator(TabName3, getResources().getDrawable(R.drawable.ic_launcher));
         Intent profileIntent = new Intent(this, Tab3.class);
         tab_3.setContent(profileIntent);
                 
         // Adding all TabSpec to TabHost
-        tabHost.addTab(tab_1); // Adding tab1 tab
-        tabHost.addTab(tab_2); // Adding tab2 tab
-        tabHost.addTab(tab_3);
+        tabHost.addTab(tab_1);
+        tabHost.addTab(tab_2);
+        tabHost.addTab(tab_3);      
 		
 		//stvori direktorij za external cache
 		if (CacheManager.EXTERNAL_STORAGE_PATH == null)
 			CacheManager.createExternalDataDir();
-        
-		//TODO TESTIRANJE POZIVA WEB SERVISA
-		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
-		//builder.appendPath("Login");
-		//builder.appendPath("Get");
-		builder.appendPath("Languages");
-		builder.appendPath("GetLanguageName");						
-		WebServiceTask webTask = new WebServiceTask(Homepage.this, builder.build().toString(), "{languageId:3}", "Loading", "Please wait...") {
-			@Override
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				
-				if (json != null) 
-					System.out.println("TESTIRANJE " + result); 
-				else 
-					System.out.println("TESTIRANJE NULL");
-			}				
-		};		
-		webTask.execute((Void)null);
-		
-		/* TODO TESTING */
-		Intent i = new Intent(this, Tr.class);
-		startActivity(i);
 	}
 
 	@Override
@@ -98,7 +75,16 @@ public class Homepage extends TabActivity implements OnClickListener {
 		case (R.id.ibNewMes):
 			Intent i = new Intent(this,RTranslation.class);
 			startActivity(i);
+			ocistiListeRequestova();
 			break;		
 		}
+	}
+	
+	//kada izlazim iz ovog activityja treba ocistiti liste requestova tako da se opet 
+	//ucitaju sljedeci put sa web servisa (jer moze proci dugo vremena kad se sljedeci put vratim)
+	public static void ocistiListeRequestova() {
+		Tab1.lista = null;
+		Tab2.lista = null;
+		Tab3.lista = null;
 	}
 }
