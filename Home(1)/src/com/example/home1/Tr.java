@@ -213,6 +213,15 @@ public class Tr extends Activity {
 			}					
 		});
 		
+		//gumb za nazad (isto ko i fizicki gumb za nazad)
+		ImageButton imBack = (ImageButton)findViewById(R.id.imBack);
+		imBack.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();				
+			}
+		});
+		
 		loadRequest();
 		loadAnswers();
 	}
