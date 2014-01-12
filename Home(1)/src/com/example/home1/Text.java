@@ -5,14 +5,14 @@ import java.security.Timestamp;
 import android.graphics.Bitmap;
 
 public class Text {
+	public long answerId;
+	
 	public String text;
 	public float rating;
 	public String timePosted;
 	
-	//url path do zvuka (ili null ako nema na ovom odgovoru)
-	public String audioURLPath = null;
-	//path do skinutog zvuka na disku ili null ako nisam skinuo
-	public String audioFilePath = null;
+	//uploadani zvuk
+	public DownloadMultimedia audio;
 	
 	//user
 	public User user;

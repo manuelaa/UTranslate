@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/request_translation_3"
+    android:background="@drawable/request_translation"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,28 +20,52 @@
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:weightSum="100" >
 
             <ImageView
-                android:id="@+id/userPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ask" />
+                android:id="@+id/ask"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ask" 
+                android:layout_weight="30"/>
 
-            <ImageButton
-                android:id="@+id/ibUpitnik2"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:src="@drawable/upitnik1" />
+                android:padding="2dp"
+                android:layout_weight="70" 
+                android:weightSum="90" 
+                >
 
-            <ImageButton
-                android:id="@+id/ibUpitnik"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/upitnik1" />
+                <ImageButton
+                    android:id="@+id/ibUpitnik2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="30"
+                    android:background="@null"
+                    android:src="@drawable/upitnik" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/trokut_small"
+                    android:layout_weight="30" />
+
+                <ImageButton
+                    android:id="@+id/ibUpitnik"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="30"
+                    android:background="@null"
+                    android:src="@drawable/upitnik" />
+
+            </LinearLayout>
+
         </TableRow>
 
         <!-- Row 1 with 1 column -->
@@ -49,7 +73,8 @@
         <TableRow
             android:id="@+id/tableRow2"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/post_1"  >
 
             <EditText
                 android:id="@+id/editText1"
@@ -72,7 +97,8 @@
         <TableRow
             android:id="@+id/tableRow3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/post_2"  >
 
             <ImageButton
                 android:id="@+id/imageButton1"

@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/default_user" />
+                android:src="@drawable/ic_launcher" />
 
             <TextView
                 android:id="@+id/UserName"
@@ -45,20 +45,28 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Rate" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="0.64"
             android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/ddmmgggg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="dd.mm.gggg., hh:mm"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/askedText"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="51dp"
                 android:layout_margin="4dp"
                 android:text="Non parlo inglese" />
 
@@ -71,25 +79,18 @@
                     style="@style/RatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:numStars="5"
-                    android:rating="3"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
                     android:stepSize="0.5" />
 
-                <TextView
-                    android:id="@+id/ddmmgggg"
+                <ImageView
+                    android:id="@+id/imageView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="dd.mm.gggg., hh:mm"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="8sp" />
+                    android:src="@drawable/sound_2" />
 
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

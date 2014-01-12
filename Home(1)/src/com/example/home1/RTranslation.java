@@ -374,9 +374,14 @@ public class RTranslation extends Activity {
 		postButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//provjera da li je sve uneseno
-				if (checkedLanguagesFrom.size() == 0 || checkedLanguagesTo.size() == 0 || editText.getText().toString() == "")
+				//provjera da li su unesene zastavice
+				if (checkedLanguagesFrom.size() == 0 || checkedLanguagesTo.size() == 0)
 					return;
+				
+				//provjera da li je unesen barem tekst ili zvuk ili audio
+				if (editText.getText().toString().isEmpty() && photoPath == null && audioPath == null)
+					return;
+				
 				
 				/* za testiranje */
 				/*				
