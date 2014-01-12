@@ -2,55 +2,251 @@
 <resources>
 	<string-array name="lang1">
 		<item name="id">1</item>
-		<item name="name">Belarusian</item>
+		<item name="name">Albanian</item>
 	</string-array>
   	<string-array name="lang2">
 		<item name="id">2</item>
-		<item name="name">Bosanski Latin</item>
+		<item name="name">Arab</item>
 	</string-array>
 	<string-array name="lang3">
 		<item name="id">3</item>
-		<item name="name">Deutsch</item>
+		<item name="name">Armenian</item>
 	</string-array>		
 	<string-array name="lang4">
 		<item name="id">4</item>
-		<item name="name">English UK</item>
+		<item name="name">Azerbaijani</item>
 	</string-array>		
 	<string-array name="lang5">
 		<item name="id">5</item>
-		<item name="name">English USA</item>
+		<item name="name">Basque</item>
 	</string-array>
 	<string-array name="lang6">
 		<item name="id">6</item>
-		<item name="name">Espanol</item>
+		<item name="name">Bosnian</item>
 	</string-array>
 	<string-array name="lang7">
 		<item name="id">7</item>
-		<item name="name">Francais</item>
+		<item name="name">Bulgarian</item>
 	</string-array>	
 	<string-array name="lang8">
 		<item name="id">8</item>
-		<item name="name">Hrvatski</item>
+		<item name="name">Byelorussian</item>
 	</string-array>
 	<string-array name="lang9">
 		<item name="id">9</item>
-		<item name="name">Italiano</item>
+		<item name="name">Catalan</item>
 	</string-array>
 	<string-array name="lang10">
 		<item name="id">10</item>
-		<item name="name">Norsk</item>
+		<item name="name">Cebuano</item>
 	</string-array>
 	<string-array name="lang11">
 		<item name="id">11</item>
-		<item name="name">Shqip</item>
+		<item name="name">Chinese</item>
 	</string-array>
 	<string-array name="lang12">
 		<item name="id">12</item>
-		<item name="name">Suomi</item>
+		<item name="name">Croatian</item>
 	</string-array>			
 	<string-array name="lang13">
 		<item name="id">13</item>
-		<item name="name">Turkce</item>
+		<item name="name">Czech</item>
+	</string-array>
+	<string-array name="lang14">
+		<item name="id">14</item>
+		<item name="name">Danish</item>
+	</string-array>	
+	<string-array name="lang15">
+		<item name="id">15</item>
+		<item name="name">Dutch</item>
+	</string-array>
+	<string-array name="lang16">
+		<item name="id">16</item>
+		<item name="name">English UK</item>
+	</string-array>
+	<string-array name="lang17">
+		<item name="id">17</item>
+		<item name="name">English US</item>
+	</string-array>
+	<string-array name="lang18">
+		<item name="id">18</item>
+		<item name="name">Estonian</item>
+	</string-array>	
+	<string-array name="lang19">
+		<item name="id">19</item>
+		<item name="name">Finnish</item>
+	</string-array>	
+	<string-array name="lang20">
+		<item name="id">20</item>
+		<item name="name">French</item>
+	</string-array>	
+	<string-array name="lang21">
+		<item name="id">21</item>
+		<item name="name">Georgian</item>
+	</string-array>	
+	<string-array name="lang22">
+		<item name="id">22</item>
+		<item name="name">German</item>
+	</string-array>	
+	<string-array name="lang23">
+		<item name="id">23</item>
+		<item name="name">Greek</item>
+	</string-array>	
+	<string-array name="lang24">
+		<item name="id">24</item>
+		<item name="name">Haitian Creole</item>
+	</string-array>	
+	<string-array name="lang25">
+		<item name="id">25</item>
+		<item name="name">Hebrew</item>
+	</string-array>	
+	<string-array name="lang26">
+		<item name="id">26</item>
+		<item name="name">Hindu</item>
+	</string-array>
+	<string-array name="lang27">
+		<item name="id">27</item>
+		<item name="name">Hungarian</item>
+	</string-array>	
+	<string-array name="lang28">
+		<item name="id">28</item>
+		<item name="name">Icelandic</item>
+	</string-array>	
+	<string-array name="lang29">
+		<item name="id">29</item>
+		<item name="name">Igbo</item>
+	</string-array>	
+	<string-array name="lang30">
+		<item name="id">30</item>
+		<item name="name">Indonesian</item>
+	</string-array>
+	<string-array name="lang31">
+		<item name="id">31</item>
+		<item name="name">Irish</item>
+	</string-array>	
+	<string-array name="lang32">
+		<item name="id">32</item>
+		<item name="name">Italian</item>
+	</string-array>
+	<string-array name="lang33">
+		<item name="id">33</item>
+		<item name="name">Japanese</item>
+	</string-array>	
+	<string-array name="lang34">
+		<item name="id">34</item>
+		<item name="name">Kannada</item>
+	</string-array>	
+	<string-array name="lang35">
+		<item name="id">35</item>
+		<item name="name">Khmer</item>
+	</string-array>	
+	<string-array name="lang36">
+		<item name="id">36</item>
+		<item name="name">Korean</item>
+	</string-array>	
+	<string-array name="lang37">
+		<item name="id">37</item>
+		<item name="name">Lao</item>
+	</string-array>	
+	<string-array name="lang38">
+		<item name="id">38</item>
+		<item name="name">Latvian</item>
+	</string-array>	
+	<string-array name="lang39">
+		<item name="id">39</item>
+		<item name="name">Lithuanian</item>
+	</string-array>	
+	<string-array name="lang40">
+		<item name="id">40</item>
+		<item name="name">Macedonian</item>
+	</string-array>	
+	<string-array name="lang41">
+		<item name="id">41</item>
+		<item name="name">Malaysian</item>
+	</string-array>	
+	<string-array name="lang42">
+		<item name="id">42</item>
+		<item name="name">Maltese</item>
+	</string-array>	
+	<string-array name="lang43">
+		<item name="id">43</item>
+		<item name="name">Maori</item>
+	</string-array>	
+	<string-array name="lang44">
+		<item name="id">44</item>
+		<item name="name">Mongolian</item>
+	</string-array>	
+	<string-array name="lang45">
+		<item name="id">45</item>
+		<item name="name">Nepali</item>
+	</string-array>
+	<string-array name="lang46">
+		<item name="id">46</item>
+		<item name="name">Norwegian</item>
+	</string-array>	
+	<string-array name="lang47">
+		<item name="id">47</item>
+		<item name="name">Polish</item>
+	</string-array>	
+	<string-array name="lang48">
+		<item name="id">48</item>
+		<item name="name">Portuguese</item>
+	</string-array>	
+	<string-array name="lang49">
+		<item name="id">49</item>
+		<item name="name">Romanian</item>
+	</string-array>	
+	<string-array name="lang50">
+		<item name="id">50</item>
+		<item name="name">Russian</item>
+	</string-array>	
+	<string-array name="lang51">
+		<item name="id">51</item>
+		<item name="name">Serbian</item>
+	</string-array>	
+	<string-array name="lang52">
+		<item name="id">52</item>
+		<item name="name">Slovenian</item>
+	</string-array>	
+	<string-array name="lang53">
+		<item name="id">53</item>
+		<item name="name">Slovak</item>
+	</string-array>	
+	<string-array name="lang54">
+		<item name="id">54</item>
+		<item name="name">Somali</item>
+	</string-array>	
+	<string-array name="lang55">
+		<item name="id">55</item>
+		<item name="name">Spanish</item>
+	</string-array>	
+	<string-array name="lang56">
+		<item name="id">56</item>
+		<item name="name">Swedish</item>
+	</string-array>	
+	<string-array name="lang57">
+		<item name="id">57</item>
+		<item name="name">Thai</item>
+	</string-array>	
+	<string-array name="lang58">
+		<item name="id">58</item>
+		<item name="name">Turkish</item>
+	</string-array>	
+	<string-array name="lang59">
+		<item name="id">59</item>
+		<item name="name">Ukrainian</item>
+	</string-array>	
+	<string-array name="lang60">
+		<item name="id">60</item>
+		<item name="name">Urdu</item>
+	</string-array>	
+	<string-array name="lang61">
+		<item name="id">61</item>
+		<item name="name">Vietnamese</item>
+	</string-array>	
+	<string-array name="lang62">
+		<item name="id">62</item>
+		<item name="name">Welsh</item>
 	</string-array>		
 	<array name="languages">
     	<item>@array/lang1</item>
@@ -66,5 +262,54 @@
     	<item>@array/lang11</item>
     	<item>@array/lang12</item>
     	<item>@array/lang13</item>
+		<item>@array/lang14</item>
+    	<item>@array/lang15</item>
+    	<item>@array/lang16</item>
+    	<item>@array/lang17</item>
+    	<item>@array/lang18</item>
+    	<item>@array/lang19</item>
+    	<item>@array/lang20</item>
+    	<item>@array/lang21</item>
+    	<item>@array/lang22</item>
+    	<item>@array/lang23</item>
+    	<item>@array/lang24</item>
+    	<item>@array/lang25</item>
+    	<item>@array/lang26</item>
+		<item>@array/lang27</item>
+    	<item>@array/lang28</item>
+    	<item>@array/lang29</item>
+    	<item>@array/lang30</item>
+    	<item>@array/lang31</item>
+    	<item>@array/lang32</item>
+    	<item>@array/lang33</item>
+    	<item>@array/lang34</item>
+    	<item>@array/lang35</item>
+    	<item>@array/lang36</item>
+    	<item>@array/lang37</item>
+    	<item>@array/lang38</item>
+    	<item>@array/lang39</item>
+		<item>@array/lang40</item>
+    	<item>@array/lang41</item>
+    	<item>@array/lang42</item>
+    	<item>@array/lang43</item>
+    	<item>@array/lang44</item>
+    	<item>@array/lang45</item>
+    	<item>@array/lang46</item>
+    	<item>@array/lang47</item>
+    	<item>@array/lang48</item>
+    	<item>@array/lang49</item>
+    	<item>@array/lang50</item>
+    	<item>@array/lang51</item>
+    	<item>@array/lang52</item>
+		<item>@array/lang53</item>
+    	<item>@array/lang54</item>
+    	<item>@array/lang55</item>
+    	<item>@array/lang56</item>
+    	<item>@array/lang57</item>
+    	<item>@array/lang58</item>
+    	<item>@array/lang59</item>
+    	<item>@array/lang60</item>
+    	<item>@array/lang61</item>
+    	<item>@array/lang62</item>
 	</array>
 </resources>
