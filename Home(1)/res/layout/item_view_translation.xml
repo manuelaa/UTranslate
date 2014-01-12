@@ -39,7 +39,7 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/bR1"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,8 +88,10 @@
 			        android:id="@+id/ratingBar1"
 			        style="@style/starRatingBar"
 			        android:layout_width="wrap_content"
-			        android:layout_height="20dp"
-			        android:rating="0.0" >
+			        android:layout_height="30dp"
+			        android:rating="0.0"
+			        android:scaleX="0.5"
+			        android:scaleY="0.5" >
 			        
 			    </RatingBar>
 
