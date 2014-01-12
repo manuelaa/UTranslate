@@ -485,6 +485,8 @@ public class RTranslation extends Activity {
 		}
 		
 		WebServiceTask webTask = new WebServiceTask(RTranslation.this, builder.build().toString(), obj.toString(), "Uploading", "Please wait...") {
+			private File tmpJson;
+			
 			@Override
 			protected String doInBackground(Void... params) {
 				Connection.ProvjeriInicijalizaciju(activity);		
@@ -494,7 +496,7 @@ public class RTranslation extends Activity {
 				
 				try {
 				    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);				    
-				    File tmpJson = File.createTempFile("request", ".dat", storageDir);					    
+				    tmpJson = File.createTempFile("request", ".dat", storageDir);					    
 				    stream = new BufferedOutputStream(new FileOutputStream(tmpJson));
 					
 				    //posto uploadam velike fajlove moram to raditi sa bufferima
@@ -510,8 +512,7 @@ public class RTranslation extends Activity {
 					stream.write('}');
 					stream.close();
 					
-					ret = Connection.callWebServicePostFile(url, tmpJson);					
-				    tmpJson.delete();
+					ret = Connection.callWebServicePostFile(url, tmpJson);									    
 				    return ret;
 				} catch (IOException e) {							
 					return null;
@@ -520,7 +521,9 @@ public class RTranslation extends Activity {
 			
 			@Override
 			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
+				tmpJson.delete();
+				
+				super.onPostExecute(result);				
 				
 				if (result != null) {
 					Intent i = new Intent(RTranslation.this, Homepage.class);				

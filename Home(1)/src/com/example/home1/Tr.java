@@ -10,7 +10,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +26,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class Tr extends Activity {
-	private List<Text> answers = new ArrayList<Text>();
+	private ArrayList<Text> answers = new ArrayList<Text>();
 	
 	//koji request prikazujem
 	public static Request request;	
 	
 	private ImageButton btnPicture;
 	private ImageButton btnAudio;
+	
+	private ArrayAdapter<Text> adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,6 @@ public class Tr extends Activity {
 		setContentView(R.layout.translation_3);
 		LoadRequest();
 		LoadAnswers();
-		populateListView();
 	}
 	
 	//ucitava request
@@ -56,7 +59,8 @@ public class Tr extends Activity {
 		if (request.pictureURLPath == null)
 			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_2));
 		else
-			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));		
+			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));	
+		
 		btnPicture.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -68,7 +72,8 @@ public class Tr extends Activity {
 		if (request.audioURLPath == null)
 			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_2));
 		else
-			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));		
+			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));	
+		
 		btnAudio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -91,8 +96,6 @@ public class Tr extends Activity {
 		} catch (JSONException e) {			
 			return;
 		}
-		
-		System.out.println("TESTIRANJE " + obj.toString());
 				
 		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading", "Please wait...") {
 			@Override
@@ -106,19 +109,18 @@ public class Tr extends Activity {
 							JSONObject obj = jsonArray.getJSONObject(i);
 							Text newAnswer = new Text();						
 							newAnswer.text = obj.getString("Text");
-							//newAnswer.timePosted = Timestamp. obj.getString("timePosted");
+							newAnswer.timePosted = obj.getString("timePosted");
 							newAnswer.rating = (float)obj.getDouble("rate");							
 							if (obj.get("audioExtension") != JSONObject.NULL)
 								newAnswer.audioURLPath = obj.getString("audio");
 
-							/* TODO user klasa */
-							newAnswer.username = "test";
-							
+							newAnswer.user = new User(Tr.this, Integer.parseInt(obj.getString("user")));							
 							answers.add(newAnswer);							
 						} catch (JSONException e) {
-							System.out.println("TESTIRANJE GRESKA " + e.getMessage());
 						}						
-					}					
+					}
+					
+					if (!answers.isEmpty()) getUsersData();
 				}
 			}				
 		};		
@@ -126,10 +128,61 @@ public class Tr extends Activity {
 	}
 	
 	private void populateListView() {
-		ArrayAdapter<Text> adapter = new ListAdapter();
+		adapter = new ListAdapter();
 		ListView list=(ListView) findViewById(R.id.listView1);
-		list.setAdapter(adapter);
+		list.setAdapter(adapter);		
  	}
+	
+	//dohvaca slike svih usera u listi odgovora 1 po 1 sa cachiranjem 
+	private void getUsersData() {					
+		AsyncTask<Void, Void, Void> webTask = new AsyncTask<Void, Void, Void>() {
+			private byte[] bytes;			
+			private User user;
+			
+			@Override
+			protected Void doInBackground(Void... params) {
+				for(int i = 0; i < answers.size(); i++) {
+					user = answers.get(i).user;
+					
+					//dohvati podatke prvo
+					Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
+					builder.appendPath("User");
+					builder.appendPath("GetUserDetails");		
+					
+					Connection.ProvjeriInicijalizaciju(Tr.this);		
+					String response = Connection.callWebService(builder.build().toString(), "{userId:" + String.valueOf(user.userId) + "}");
+					
+					if (response != null) {
+						try {
+							JSONObject obj = new JSONObject(response);					
+							user.name = obj.getString("name");
+							user.email = obj.getString("email");
+							user.pictureURLPath = obj.getString("picture");
+						} catch(JSONException e) {						
+						}			
+					}	
+					
+					if (user.pictureURLPath == null) continue;
+					
+					//dohvati sliku
+					if (user.picture != null) user.picture.recycle();
+					bytes = DownloadFile.getFileFromCache(Tr.this, user.pictureURLPath, "user_" + String.valueOf(user.userId) + ".dat");					
+					
+					if (bytes != null) 
+						user.picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);					
+				}
+								
+				return null;	
+			}
+			
+			@Override
+			protected void onPostExecute(Void result) {
+				populateListView();
+			}
+		};
+		
+		webTask.execute((Void)null);		
+	}
 	
 	private class ListAdapter extends ArrayAdapter<Text> {
 		public ListAdapter() {
@@ -146,10 +199,12 @@ public class Tr extends Activity {
 			Text current = answers.get(position);
 			
 			TextView userN = (TextView)itemView.findViewById(R.id.UserName);
-			userN.setText(current.username);	
+			userN.setText(current.user.name);	
 			
-			//ImageView userP = (ImageView)itemView.findViewById(R.id.userPhoto);
-			//userP.setImageResource(currentId());
+			if (current.user.picture != null) {
+				ImageView userP = (ImageView)itemView.findViewById(R.id.userPhoto);
+				userP.setImageBitmap(current.user.picture);
+			}
 	
 			TextView aText = (TextView)itemView.findViewById(R.id.askedText);
 			aText.setText(current.text);

@@ -2,8 +2,9 @@ package com.example.home1;
 
 import java.security.Timestamp;
 
+import android.graphics.Bitmap;
+
 public class Text {
-	public String username;
 	public String text;
 	public float rating;
 	public String timePosted;
@@ -13,7 +14,8 @@ public class Text {
 	//path do skinutog zvuka na disku ili null ako nisam skinuo
 	public String audioFilePath = null;
 	
-	//TODO display picture
+	//user
+	public User user;
 	
 	public Text() {}
 }

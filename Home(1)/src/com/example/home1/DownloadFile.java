@@ -14,8 +14,8 @@ import android.content.Context;
 //koristiti u background tasku
 public class DownloadFile {	
 	//sprema file sa url-a u zadani cache file
-	public static byte[] saveToCache(Context context, String url, String name) {
-	    URL urlObj;
+	public static byte[] saveToCache(Context context, String url, String name) {		
+		URL urlObj;
 		try {
 			urlObj = new URL(url);
 		} catch (MalformedURLException e) {
@@ -25,16 +25,15 @@ public class DownloadFile {
 	    HttpURLConnection con = null;	    
 		try {
 			con = (HttpURLConnection)urlObj.openConnection();
-		    con.setRequestMethod("GET"); 
-		    con.setDoOutput(true);	  
 	        con.setInstanceFollowRedirects(false);
 	        con.setUseCaches(false);
 	        con.connect();
 	        
 	        InputStream is = con.getInputStream();
 	        int size = con.getContentLength();
+	        
 		    byte[] data = new byte[size];
-		    is.read(data, 0, size);
+		    is.read(data);		    
 		    is.close();
 		    con.disconnect();
 		    
@@ -42,7 +41,7 @@ public class DownloadFile {
 		    
 		    return data;
 		} catch (IOException e) {
-			if (con != null) con.disconnect();
+			if (con != null) con.disconnect();			
 			return null;
 		}
 	}
@@ -59,8 +58,6 @@ public class DownloadFile {
 	    HttpURLConnection con = null;	    
 		try {
 			con = (HttpURLConnection)urlObj.openConnection();
-		    con.setRequestMethod("GET"); 
-		    con.setDoOutput(true);	  
 	        con.setInstanceFollowRedirects(false);
 	        con.setUseCaches(false);
 	        con.connect();

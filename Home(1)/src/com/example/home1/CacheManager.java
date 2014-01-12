@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import android.content.Context;
 
@@ -14,17 +15,18 @@ public class CacheManager {
 	private static final long MAX_SIZE = 5242880L; //5MB
 
 	//sprema podatke u cache
-    public static void cacheData(Context context, byte[] data, String name) throws IOException {
-        File cacheDir = context.getCacheDir();
+    public static void cacheData(Context context, byte[] data, String name) throws IOException {            	
+    	File cacheDir = context.getCacheDir();
         long size = getDirSize(cacheDir);
         long newSize = data.length + size;
-
+        
         //ocisti cache
         if (newSize > MAX_SIZE)
             cleanDir(cacheDir, newSize - MAX_SIZE);
 
         File file = new File(cacheDir, name);
         FileOutputStream fos = new FileOutputStream(file);
+        
         try {
             fos.write(data);
         }
@@ -35,8 +37,8 @@ public class CacheManager {
     }
     
     //vraca podatke iz cachea
-    public static byte[] getData(Context context, String name) throws IOException {
-        File cacheDir = context.getCacheDir();
+    public static byte[] getData(Context context, String name) throws IOException {    	
+    	File cacheDir = context.getCacheDir();
         File file = new File(cacheDir, name);
 
         if (!file.exists()) return null;        
