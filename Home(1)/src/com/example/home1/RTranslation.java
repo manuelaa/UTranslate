@@ -74,7 +74,7 @@ public class RTranslation extends Activity {
 	private ImageButton toLanguageButton;
 	private static final int ACTIVITY_TO_LANGUAGE = 500;
 	
-	private static final int ACTIVITY_SIMILAR_REQUEST = 600;
+	private static final int ACTIVITY_SIMILAR_REQUEST = 600;	
 	
 	private Button postButton;
 	private EditText editText;
@@ -83,14 +83,11 @@ public class RTranslation extends Activity {
 	private File createImageFile() throws IOException {
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 	    String imageFileName = "UTranslate_" + timeStamp;
-	    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-	    
-	    //File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-	    File image = new File(storageDir, imageFileName + ".jpg");
 
-	    //photoPathNew = "file:" + image.getAbsolutePath();
-	    photoPathNew = image.getAbsolutePath();	    
-	    return image;
+	    photoPathNew = CacheManager.EXTERNAL_STORAGE_PATH + imageFileName + ".jpg";
+	    File image = new File(photoPathNew);
+	    
+	    return new File(photoPathNew);	
 	}
 	
 	//dodaje sliku u galeriju
@@ -148,7 +145,7 @@ public class RTranslation extends Activity {
         
 	    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 	    String audioFileName = "UTranslate_" + timeStamp;
-        audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + audioFileName + ".3gp";        
+        audioPath = CacheManager.EXTERNAL_STORAGE_PATH + audioFileName + ".3gp";        
         audioRecorder.setOutputFile(audioPath);
         
         try {        	
@@ -260,7 +257,11 @@ public class RTranslation extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-				
+		
+		//stvori direktorij za external cache
+		if (CacheManager.EXTERNAL_STORAGE_PATH == null)
+			CacheManager.createExternalDataDir();
+		
 		//slozi dijalog za odabir izmedju kamere/slike sa diska
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle("Add photo");

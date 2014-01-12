@@ -25,7 +25,7 @@ public class User {
 	public long userId;
 	public String name;
 	public String email;
-	public String pictureURLPath = null;
+	public String pictureURLPath;
 	public Bitmap picture = null;
 	
 	public Activity activity;

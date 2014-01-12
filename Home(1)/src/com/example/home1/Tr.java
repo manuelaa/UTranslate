@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -41,22 +42,27 @@ public class Tr extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
+		//stvori direktorij za external cache
+		if (CacheManager.EXTERNAL_STORAGE_PATH == null)
+			CacheManager.createExternalDataDir();
+		
 		/* TODO TESTING */
 		//(Context context, long userId, long requestId, String text, String audioURLPath, String pictureURLPath, int idLang1, int idLang2, String timePosted, boolean notification) {
-		request = new Request(this, 1, 1, "tekst", null, null, 2, 4, "1.1.2014.", false);
+		//request = new Request(this, 1, 1, "tekst", null, null, 2, 4, "1.1.2014.", false);
+		request = new Request(this, 1, 63, "tekst", "http://nihao.fer.hr/UTranslate/data/request_audio/request_63.3gp", "http://nihao.fer.hr/UTranslate/data/request_pictures/request_63.jpg", 1, 1, "1.1.2014.", false);
 		
 		setContentView(R.layout.translation_3);
-		LoadRequest();
-		LoadAnswers();
+		loadRequest();
+		loadAnswers();
 	}
 	
 	//ucitava request
-	private void LoadRequest() {
+	private void loadRequest() {
 		TextView reqText = (TextView)findViewById(R.id.tv_show);
 		reqText.setText(request.text);
 		
 		btnPicture = (ImageButton) findViewById(R.id.ibCam);
-		if (request.pictureURLPath == null)
+		if (request.picture.URLPath == null)
 			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_2));
 		else
 			btnPicture.setImageDrawable(getResources().getDrawable(R.drawable.cam_1));	
@@ -64,12 +70,12 @@ public class Tr extends Activity {
 		btnPicture.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				
+				request.picture.show(Tr.this, "image/*");
 			}
 		});
 
 		btnAudio = (ImageButton) findViewById(R.id.ibSound);
-		if (request.audioURLPath == null)
+		if (request.audio.URLPath == null)
 			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_2));
 		else
 			btnAudio.setImageDrawable(getResources().getDrawable(R.drawable.sound_1));	
@@ -77,14 +83,14 @@ public class Tr extends Activity {
 		btnAudio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				
+				request.audio.show(Tr.this, "audio/*");
 			}
 		});
 
 	}
 	
 	//ucitava odgovore
-	private void LoadAnswers() {
+	private void loadAnswers() {
 		Uri.Builder builder = Uri.parse(Connection.WEB_SERVICE_URL).buildUpon();
 		builder.appendPath("Answers");
 		builder.appendPath("GetRequestAnswers");						
@@ -96,8 +102,8 @@ public class Tr extends Activity {
 		} catch (JSONException e) {			
 			return;
 		}
-				
-		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading", "Please wait...") {
+
+		WebServiceTask webTask = new WebServiceTask(Tr.this, builder.build().toString(), obj.toString(), "Loading answers", "Please wait...") {
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
@@ -110,7 +116,11 @@ public class Tr extends Activity {
 							Text newAnswer = new Text();						
 							newAnswer.text = obj.getString("Text");
 							newAnswer.timePosted = obj.getString("timePosted");
-							newAnswer.rating = (float)obj.getDouble("rate");							
+							newAnswer.rating = (float)obj.getDouble("rate");
+							
+							//rating treba zaokruziti na .5 decimalu
+							newAnswer.rating = Math.round(newAnswer.rating * 2) / 2.0f;
+							
 							if (obj.get("audioExtension") != JSONObject.NULL)
 								newAnswer.audioURLPath = obj.getString("audio");
 
@@ -208,19 +218,12 @@ public class Tr extends Activity {
 	
 			TextView aText = (TextView)itemView.findViewById(R.id.askedText);
 			aText.setText(current.text);
-			
-			/*
-			ImageView LangA = (ImageView)itemView.findViewById(R.id.langA);			
-			LangA.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
-			
-			ImageView LangB = (ImageView)itemView.findViewById(R.id.LangB);
-			LangB.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));								
-			*/
-			
-			/*
+						
 			RatingBar rb = (RatingBar) itemView.findViewById(R.id.ratingBar1);
-			rb.setRating(0);
-			*/
+			rb.setRating(current.rating);			
+			
+			TextView timePosted = (TextView)itemView.findViewById(R.id.ddmmgggg);
+			timePosted.setText(current.timePosted);
 			
 			return itemView;
 		}

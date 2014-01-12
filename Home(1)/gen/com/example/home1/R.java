@@ -273,13 +273,14 @@ containing a value of this type.
         public static final int sound_2=0x7f020043;
         public static final int star=0x7f020044;
         public static final int star_e=0x7f020045;
-        public static final int star_small=0x7f020046;
-        public static final int translation_1=0x7f020047;
-        public static final int trokut=0x7f020048;
-        public static final int trokut_small=0x7f020049;
-        public static final int upitnik1=0x7f02004a;
-        public static final int upitnik_small=0x7f02004b;
-        public static final int vise_jezika=0x7f02004c;
+        public static final int star_ratingbar=0x7f020046;
+        public static final int star_small=0x7f020047;
+        public static final int translation_1=0x7f020048;
+        public static final int trokut=0x7f020049;
+        public static final int trokut_small=0x7f02004a;
+        public static final int upitnik1=0x7f02004b;
+        public static final int upitnik_small=0x7f02004c;
+        public static final int vise_jezika=0x7f02004d;
     }
     public static final class id {
         public static final int CheckBox=0x7f050015;

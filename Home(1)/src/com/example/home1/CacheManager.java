@@ -8,12 +8,23 @@ import java.io.IOException;
 import java.net.URL;
 
 import android.content.Context;
+import android.os.Environment;
 
 //brine se oko cache memorije
 //sve funkcije bi se trebale odvijati u background threadu
 public class CacheManager {
 	private static final long MAX_SIZE = 5242880L; //5MB
 
+	public static String EXTERNAL_STORAGE_PATH = null; 
+	
+	//stvara folder za external cache (prave fileove)
+	//pozvati na pocetku aplikacije
+	public static void createExternalDataDir() {
+		File storageDir = Environment.getExternalStoragePublicDirectory("/UTranslate/");
+		storageDir.mkdir();
+		EXTERNAL_STORAGE_PATH = storageDir.getAbsolutePath() + "/";		
+	}
+	
 	//sprema podatke u cache
     public static void cacheData(Context context, byte[] data, String name) throws IOException {            	
     	File cacheDir = context.getCacheDir();

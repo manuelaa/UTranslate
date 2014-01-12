@@ -8,12 +8,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 
 //sluzi za skidanje datoteka sa URL-a
 //koristiti u background tasku
 public class DownloadFile {	
 	//sprema file sa url-a u zadani cache file
+	//koristiti u background threadu
 	public static byte[] saveToCache(Context context, String url, String name) {		
 		URL urlObj;
 		try {
@@ -47,6 +53,7 @@ public class DownloadFile {
 	}
 	
 	//sprema file sa url-a u zadani file u normalnom storageu
+	//koristiti u background threadu
 	public static boolean saveToFile(String url, File file) {
 	    URL urlObj;
 		try {
@@ -84,6 +91,7 @@ public class DownloadFile {
 	}
 		
 	//provjerava prvo da li file vec postoji u cacheu i ako ne postoji skida u cache
+	//koristiti u background threadu
 	public static byte[] getFileFromCache(Context context, String url, String name) {
 		byte[] ret = null;
 		
