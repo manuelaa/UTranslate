@@ -40,7 +40,6 @@ public class Tab1 extends Activity {
 	    populateList();
 	}
 
-
 	private void populateList() {
 		if (lista != null) return;
 		

@@ -40,6 +40,13 @@ public class Login extends Activity implements OnClickListener{
 		}	
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		Connection.initialized = false;
+		Connection.initialize(Login.this);
+	}
+	
 	//vrati array svih google accounta na mobitelu
     private String[] getAccountNames() {
     	accountManager = AccountManager.get(this);

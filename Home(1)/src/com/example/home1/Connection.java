@@ -75,7 +75,7 @@ public class Connection {
 	//pamti da li se obavila inicijalizacija
 	//sluzi zato da ako veza pukne prilikom vracanja na Login activity ne ucita iz filea
 	//da je ostao logiran i pokusa se logirati opet i na taj nacin pokrene beskonacnu petlju
-	private static boolean initialized = false;
+	public static boolean initialized = false;
 		
 	//provjerava da li korisnik ima potreban library i sprema login activity za kasnije koristenje
 	public static void initialize(Activity activity)
@@ -165,7 +165,8 @@ public class Connection {
 						out.flush();
 						out.close();
 						fos.close();			
-					} catch (IOException ex) {}
+					} catch (IOException ex) {
+					}
 														
 					//prebaci na homepage
 					redirectToHomepage();

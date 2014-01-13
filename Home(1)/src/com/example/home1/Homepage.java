@@ -26,6 +26,8 @@ public class Homepage extends TabActivity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.tabs);
+		
+		ocistiListeRequestova();
 				
 		ImageButton iButton= (ImageButton)findViewById(R.id.ibNewMes);
 		iButton.setOnClickListener(this);

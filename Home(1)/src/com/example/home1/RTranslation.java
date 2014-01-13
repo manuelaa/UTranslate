@@ -532,8 +532,6 @@ public class RTranslation extends Activity {
 				super.onPostExecute(result);				
 				
 				if (result != null) {
-					Intent i = new Intent(RTranslation.this, Homepage.class);				
-	        		startActivity(i);
 	        		finish();
 				}
 			}				
