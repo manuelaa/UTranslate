@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <ImageView
+            android:id="@+id/ivSimilarFlag"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/vise_jezika" />
+
+        <TextView
+            android:id="@+id/item_txtSimilar"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:gravity="center|left"
+            android:paddingLeft="7dp"
+            android:text="Bok bok"
+            android:textSize="20sp"
+            android:singleLine="true" />
+
+
+    </LinearLayout>
+    
+</RelativeLayout>
+</LinearLayout>

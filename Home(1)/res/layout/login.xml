@@ -18,29 +18,30 @@
         android:orientation="vertical"
         android:weightSum="100" >
 
-        <Spinner
-            android:id="@+id/accountSpinner"
-            android:layout_width="191dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="9.57"
-            android:gravity="center_vertical"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="vertical" />
-
-        <Button
-            android:id="@+id/bLogin"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="131dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="140dp"
-            android:layout_weight="30"
-            android:text="Login"
-            android:textColor="@color/button_post_text"
-            android:textColorHint="@color/button_login_text" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bLogin"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="30"
+        android:text="Login"
+        android:textColor="@color/button_post_text"
+        android:textColorHint="@color/button_login_text" />
+
+    <Spinner
+        android:id="@+id/accountSpinner"
+        android:layout_width="191dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_weight="9.57"
+        android:gravity="center_vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical" />
 
 </RelativeLayout>
 

@@ -32,6 +32,10 @@ public class Homepage extends TabActivity implements OnClickListener {
 		ImageButton iButton= (ImageButton)findViewById(R.id.ibNewMes);
 		iButton.setOnClickListener(this);
 		
+		
+		ImageButton iButton2= (ImageButton)findViewById(R.id.imageButton2);
+		iButton2.setOnClickListener(this);
+		
 		TabHost tabHost = getTabHost();
         
         // Tab1 Tab
@@ -79,6 +83,12 @@ public class Homepage extends TabActivity implements OnClickListener {
 			startActivity(i);
 			ocistiListeRequestova();
 			break;		
+		
+		case(R.id.imageButton2):
+			Intent j = new Intent(this,Settings.class);
+			startActivity(j);
+			ocistiListeRequestova();
+			break;
 		}
 	}
 	

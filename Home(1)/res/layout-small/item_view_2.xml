@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <ImageView
+            android:id="@+id/item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:maxHeight="80dp"
+            android:maxWidth="45dp"
+            android:src="@drawable/lang_3"
+            android:layout_weight="15" />
+
+        <TextView
+            android:id="@+id/item_txtLang"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_gravity="center|left"
+            android:layout_weight="82"
+            android:gravity="center|left"
+            android:paddingLeft="7dp"
+            android:text="deutsch"
+            android:textSize="15sp"
+            android:textColor="@color/button_post_text" />
+
+        <ImageButton
+            android:id="@+id/ibMinus"
+            android:layout_width="80dp"
+            android:layout_height="51dp"
+            android:background="@null"
+            android:src="@drawable/minus" />
+
+	</LinearLayout>
+    
+</RelativeLayout>
+</LinearLayout>
